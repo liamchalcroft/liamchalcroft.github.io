@@ -2,9 +2,9 @@
 title: "COMP0900: Intro to Deep Learning"
 collection: teaching
 type: "Graduate course"
-permalink: /teaching/2014-spring-teaching-1
-venue: "University 1, Department"
-date: 2014-01-01
+permalink: /teaching/teaching-1
+venue: "University College London, Department of Computer Science"
+date: 2021-10-01
 location: "London, United Kingdom"
 ---
 
