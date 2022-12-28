@@ -11,26 +11,31 @@ redirect_from:
 
 Education
 ======
-* MSc in Chemical Physics, University of Bristol, 2020
-* MRes in Medical Imaging, University College London, 2021
 * Ph.D in Medical Imaging, University College London, 2024 (expected)
+* MRes in Medical Imaging (*Dist.*), University College London, 2021
+* MSc in Chemical Physics (*1st Hons.*), University of Bristol, 2020
 
 Work experience
 ======
-* 2021-Present: Teaching Assistant
+* 2022-Present: Consultant Machine Learning Tutor, *Cambridge Spark*
+  * Teaching courses covering subjects such as Python, Pandas, TensorFlow and PyTorch
+  * Customers include top consulting and financial firms
+
+* 2021-2022: Teaching Assistant, *University College London*
   * COMP0090: Intro to Deep Learning
 
-* 2018-2019: Research Scientist Intern
-  * Schlumberger
+* 2018-2019: Research Scientist Intern, *Schlumberger*
+  * Soft-matter chemistry research into rheology of oil-based drilling fluids
+  * Mixture of lab-based work and data analysis
   
-Skills
+<!-- Skills
 ======
 * Skill 1
 * Skill 2
   * Sub-skill 2.1
   * Sub-skill 2.2
   * Sub-skill 2.3
-* Skill 3
+* Skill 3 -->
 
 Publications
 ======
@@ -52,4 +57,4 @@ Teaching
   
 Service and leadership
 ======
-*
+* 
