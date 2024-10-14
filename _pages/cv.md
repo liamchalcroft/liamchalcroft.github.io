@@ -23,8 +23,8 @@ Education
 
 Publications
 ======
-* E. de la Rosa, et al. (including L. Chalcroft), A Robust Ensemble Algorithm for Ischemic Stroke Lesion Segmentation: Generalizability and Clinical Utility Beyond the ISLES Challenge. arXiv preprint, 2024. Under review at Nature Communications. [Full text available](https://arxiv.org/abs/2403.19425).
 * L. Chalcroft, I. Pappas, C.J. Price, J. Ashburner, Synthetic Data for Robust Stroke Segmentation. arXiv preprint, 2024. [Full text available](http://arxiv.org/abs/2404.01946v1).
+* E. de la Rosa, et al. (including L. Chalcroft), A Robust Ensemble Algorithm for Ischemic Stroke Lesion Segmentation: Generalizability and Clinical Utility Beyond the ISLES Challenge. arXiv preprint, 2024. Under review at Nature Communications. [Full text available](https://arxiv.org/abs/2403.19425).
 * L.F.Chalcroft, et al., LKA: Large-kernel Attention for Efficient and Robust Brain Lesion Segmentation. 37th Conference on Neural Information Processing Systems (NeurIPS), 2023. [Full text available as pre-print](https://arxiv.org/pdf/2308.07251).
 * L.F.Chalcroft, et al., Development and evaluation of intraoperative ultrasound segmentation with negative image frames and multiple observer labels. ASMUS/MICCAI, 2021. [Full text available as pre-print](https://arxiv.org/pdf/2108.04114).
 

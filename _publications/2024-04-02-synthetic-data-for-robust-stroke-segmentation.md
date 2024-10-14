@@ -10,7 +10,23 @@ citation: 'Chalcroft, L., Pappas, I., Price, C.J., & Ashburner, J. (2024). Synth
 ---
 
 ## Abstract
-[Insert abstract here]
+Deep learning-based semantic segmentation in neuroimaging
+currently requires high-resolution scans and extensive annotated datasets,
+posing significant barriers to clinical applicability. We present a novel
+synthetic framework for the task of lesion segmentation, extending the
+capabilities of the established SynthSeg approach to accommodate large
+heterogeneous pathologies with lesion-specific augmentation strategies.
+Our method trains deep learning models, demonstrated here with the
+UNet architecture, using label maps derived from healthy and stroke
+datasets, facilitating the segmentation of both healthy tissue and patho-
+logical lesions without sequence-specific training data. Evaluated against
+in-domain and out-of-domain (OOD) datasets, our framework demon-
+strates robust performance, rivaling current methods within the training
+domain and significantly outperforming them on OOD data. This contri-
+bution holds promise for advancing medical imaging analysis in clinical
+settings, especially for stroke pathology, by enabling reliable segmenta-
+tion across varied imaging sequences with reduced dependency on large
+annotated corpora. Code and weights available at (https://github.com/liamchalcroft/SynthStroke).
 
 ## Key Figures
 [Insert figure descriptions and images here]
