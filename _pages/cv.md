@@ -11,7 +11,7 @@ redirect_from:
 
 ## Profile
 
-I am a **PhD student** specializing in **Machine Learning** and **Medical Image Analysis**, with hands-on experience in both academic research and industry. My expertise includes:
+I am a **PhD student** specialising in **Machine Learning** and **Medical Image Analysis**, with hands-on experience in both academic research and industry. My expertise includes:
 
 - 🧠 Deep learning
 - 👁️ Computer vision
@@ -83,7 +83,7 @@ I am seeking opportunities to apply my expertise in machine learning to real-wor
 *University College London, London, UK (Sept 2020 - Aug 2021)*
 
 - Developed robust segmentation algorithms using hypernetworks for domain-specific medical imaging
-- Created custom PyTorch library for CNNs, hypernetworks, adversarial training, and t-SNE visualization
+- Created custom PyTorch library for CNNs, hypernetworks, adversarial training, and t-SNE visualisation
 - Researched image-level false-positives in segmentation, resulting in publication at **MICCAI**
 
 ### Research Scientist (Intern)
