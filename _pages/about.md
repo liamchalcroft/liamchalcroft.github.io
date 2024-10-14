@@ -24,4 +24,8 @@ My work aims to develop robust and generalizable machine learning models for med
 
 Currently, I am working on my PhD thesis, which explores novel approaches to domain generalization and synthetic data generation for 3D medical image segmentation. This includes developing convolutional attention models, implementing self-supervised learning techniques, and creating physically-constrained synthetic data frameworks to enhance the performance and reliability of deep learning models in real-world clinical scenarios.
 
+## Recent Publication
+
+My latest work, "[Synthetic Data for Robust Stroke Segmentation](publication/2024-04-02-synthetic-data-for-robust-stroke-segmentation)", explores the use of synthetic data in improving stroke segmentation techniques. This pre-print is now available on arXiv.
+
 Feel free to explore my [publications](/publications/) and [CV](/cv/) to learn more about my academic journey and research contributions.

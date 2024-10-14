@@ -37,17 +37,17 @@ Research Experience
   * Writing production backend code in C++ and Rust
 
 * PhD Research Student, University College London, London, UK (Aug 2021 - Present)
-  * Developed a framework for physically-constrained synthetic data for robust deep learning
-  * Developed convolutional attention models for 3D medical image segmentation
-  * Developed public PyTorch library for 3D contrastive learning in medical imaging (ssUNet)
-  * Extended previous work using synthetic data for brain segmentation to stroke lesion segmentation
-  * Extended previous work on hypernetworks to use self-supervised learning (SSL) on unlabelled data
-  * Developed 3D implementation of VD-VAE for normative modelling and anomaly detection
+  * Developed physically-constrained synthetic data framework for robust deep learning in medical imaging
+  * Created convolutional attention models for 3D medical image segmentation; presented at **NeurIPS** 2023
+  * Authored PyTorch library (ssUNet) for 3D contrastive learning in medical imaging
+  * Applied synthetic data and novel VAE models to stroke lesion segmentation tasks
+  * Enhanced hypernetworks with self-supervised learning for diverse domain adaptation
+  * Implemented 3D VD-VAE for normative modeling and anomaly detection in medical imaging
 
 * MRes Research Student, University College London, London, UK (Sept 2020 - Aug 2021)
-  * Developed robust segmentation algorithms using hypernetworks to encode domain information
-  * Developed custom PyTorch library implementing CNNs, hypernetworks, adversarial training and t-SNE visualisation
-  * Performed experiments into image-level false-positives in segmentation
+  * Developed robust segmentation algorithms using hypernetworks for domain-specific medical imaging
+  * Created custom PyTorch library for CNNs, hypernetworks, adversarial training, and t-SNE visualization
+  * Researched image-level false-positives in segmentation, resulting in publication at **MICCAI**
 
 * Research Scientist (Intern), Schlumberger Cambridge Research, Cambridge, UK (Aug 2018 - Aug 2019)
   * Studying non-newtonian fluids for oil/gas drilling through rheology and diffusing-wave spectroscopy
@@ -63,6 +63,7 @@ Leadership Experience
 
 Publications
 ======
+* L. Chalcroft, I. Pappas, C.J. Price, J. Ashburner, Synthetic Data for Robust Stroke Segmentation. arXiv preprint, 2024. [Full text available](http://arxiv.org/abs/2404.01946v1).
 * L.F.Chalcroft, et al., LKA: Large-kernel Attention for Efficient and Robust Brain Lesion Segmentation. 37th Conference on Neural Information Processing Systems (NeurIPS), 2023. [Full text available as pre-print](https://arxiv.org/pdf/2308.07251).
 * L.F.Chalcroft, et al., Development and evaluation of intraoperative ultrasound segmentation with negative image frames and multiple observer labels. ASMUS/MICCAI, 2021. [Full text available as pre-print](https://arxiv.org/pdf/2108.04114).
 
