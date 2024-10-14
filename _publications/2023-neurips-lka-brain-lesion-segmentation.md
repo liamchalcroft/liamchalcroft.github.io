@@ -10,7 +10,7 @@ citation: 'Chalcroft, L.F., et al. (2023). LKA: Large-kernel Attention for Effic
 ---
 
 ## Abstract
-[Insert abstract here]
+a
 
 ## Key Figures
 [Insert figure descriptions and images here]
