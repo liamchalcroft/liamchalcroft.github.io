@@ -26,7 +26,9 @@ domain and significantly outperforming them on OOD data. This contri-
 bution holds promise for advancing medical imaging analysis in clinical
 settings, especially for stroke pathology, by enabling reliable segmenta-
 tion across varied imaging sequences with reduced dependency on large
-annotated corpora. Code and weights available at (https://github.com/liamchalcroft/SynthStroke).
+annotated corpora.
+
+**Code:** [SynthStroke](https://github.com/liamchalcroft/SynthStroke)
 
 ## Key Figures
 ![Sample predictions with ensembling method]({{ site.baseurl }}/images/synth_preds.png)

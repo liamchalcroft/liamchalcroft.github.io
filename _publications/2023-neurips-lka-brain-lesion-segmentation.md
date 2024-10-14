@@ -18,8 +18,9 @@ mentation, we propose an all-convolutional transformer block variant of
 the U-Net architecture. We demonstrate that our model provides the
 greatest compromise in three factors: performance competitive with the
 state-of-the-art; parameter efficiency of a CNN; and the favourable in-
-ductive biases of a transformer. Our public implementation is available
-at (https://github.com/liamchalcroft/MDUNet).
+ductive biases of a transformer.
+
+**Code:** [MDUNet](https://github.com/liamchalcroft/MDUNet)
 
 ## Key Figures
 ![LKA Architecture]({{ site.baseurl }}/images/lka_arch.png)

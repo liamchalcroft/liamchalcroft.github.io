@@ -32,6 +32,8 @@ to present robust and reproducible open-source implementations, and
 to report a set of comprehensive results and analysis comparing these
 practical, yet important, options in a real-world clinical application.
 
+**Code:** [RectAngle](https://github.com/liamchalcroft/RectAngle)
+
 ## Key Figures
 ![Pre-screening classifier architecture]({{ site.baseurl }}/images/asmus_prescreen.png)
 
