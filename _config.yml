@@ -10,7 +10,7 @@ locale                   : "en-GB"
 title                    : "Liam Chalcroft"
 title_separator          : "-"
 name                     : &name "Liam Chalcroft"
-description              : &description "PhD Student at Wellcome Centre for Human Neuroimaging, UCL"
+description              : &description "ML PhD @ UCL | Deep Learning and 3D Computer Vision for Medical Imaging"
 url                      : https://liamchalcroft.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "liamchalcroft/liamchalcroft.github.io"
@@ -82,18 +82,17 @@ analytics:
 author:
   name             : "Liam Chalcroft"
   avatar           : "profile.png"
-  bio              : "PhD Student at Wellcome Centre for Human Neuroimaging, UCL. Working on robust deep learning for medical image analysis."
+  bio              : "ML PhD @ UCL | Deep Learning and 3D Computer Vision for Medical Imaging"
   location         : "London"
-  employer         :
+  employer         : "University College London"
   pubmed           : 
   googlescholar    : "https://scholar.google.com/citations?user=u3EHJ0gAAAAJ&hl=en"
-  email            :
+  email            : "liamchalcroft@gmail.com"
   researchgate     :  # example: "https://www.researchgate.net/profile/yourprofile"
   uri              :
   bitbucket        :
   codepen          :
   dribbble         :
-  flickr           :
   facebook         :
   foursquare       :
   github           : "liamchalcroft"
