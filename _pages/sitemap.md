@@ -14,4 +14,5 @@ A list of all the main pages on the site. For you robots out there is an [XML ve
   <li><a href="{{ base_path }}/about/">About Me</a></li>
   <li><a href="{{ base_path }}/cv/">CV</a></li>
   <li><a href="{{ base_path }}/publications/">Publications</a></li>
+  <li><a href="{{ base_path }}/open-source/">Open Source Contributions</a></li>
 </ul>

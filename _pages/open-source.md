@@ -1,0 +1,28 @@
+---
+layout: archive
+title: "Open Source Contributions"
+permalink: /open-source/
+author_profile: true
+---
+
+{% include base_path %}
+
+## GitHub Stats
+
+![Your GitHub stats](https://github-readme-stats.vercel.app/api?username=liamchalcroft&show_icons=true&theme=radical)
+
+## Top Languages
+
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=liamchalcroft&layout=compact&theme=radical)
+
+## Key Repositories
+
+[![SynthStroke](https://github-readme-stats.vercel.app/api/pin/?username=liamchalcroft&repo=SynthStroke&theme=radical)](https://github.com/liamchalcroft/SynthStroke)
+
+[![MDUNet](https://github-readme-stats.vercel.app/api/pin/?username=liamchalcroft&repo=MDUNet&theme=radical)](https://github.com/liamchalcroft/MDUNet)
+
+[![RectAngle](https://github-readme-stats.vercel.app/api/pin/?username=liamchalcroft&repo=RectAngle&theme=radical)](https://github.com/liamchalcroft/RectAngle)
+
+## Contributions
+
+![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=liamchalcroft&theme=radical)

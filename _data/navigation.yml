@@ -18,5 +18,8 @@ main:
   - title: "CV"
     url: /cv/
     
+  - title: "Open Source"
+    url: /open-source/
+    
 #   - title: "Guide"
 #     url: /markdown/
