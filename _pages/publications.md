@@ -15,6 +15,9 @@ author_profile: true
 
 <ul>
   <li>
+    E. de la Rosa, et al. (including L. Chalcroft), "<a href="/publication/2024-robust-ensemble-ischemic-stroke-segmentation">A Robust Ensemble Algorithm for Ischemic Stroke Lesion Segmentation: Generalizability and Clinical Utility Beyond the ISLES Challenge</a>." arXiv preprint, 2024. <a href="https://arxiv.org/abs/2403.19425">[Full text available]</a>
+  </li>
+  <li>
     L. Chalcroft, I. Pappas, C.J. Price, J. Ashburner, "<a href="/publication/2024-synthetic-data-stroke-segmentation">Synthetic Data for Robust Stroke Segmentation</a>." arXiv preprint, 2024. <a href="http://arxiv.org/abs/2404.01946v1">[Full text available]</a>
   </li>
 </ul>

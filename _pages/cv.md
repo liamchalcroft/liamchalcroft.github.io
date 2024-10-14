@@ -21,6 +21,13 @@ Education
   * Relevant modules: Inverse Problems in Imaging (81%), Machine Learning in Medical Imaging (87%)
 * MSci in Chemical Physics (*1st Class Honours*), University of Bristol, 2016 - 2020
 
+Publications
+======
+* E. de la Rosa, et al. (including L. Chalcroft), A Robust Ensemble Algorithm for Ischemic Stroke Lesion Segmentation: Generalizability and Clinical Utility Beyond the ISLES Challenge. arXiv preprint, 2024. Under review at Nature Communications. [Full text available](https://arxiv.org/abs/2403.19425).
+* L. Chalcroft, I. Pappas, C.J. Price, J. Ashburner, Synthetic Data for Robust Stroke Segmentation. arXiv preprint, 2024. [Full text available](http://arxiv.org/abs/2404.01946v1).
+* L.F.Chalcroft, et al., LKA: Large-kernel Attention for Efficient and Robust Brain Lesion Segmentation. 37th Conference on Neural Information Processing Systems (NeurIPS), 2023. [Full text available as pre-print](https://arxiv.org/pdf/2308.07251).
+* L.F.Chalcroft, et al., Development and evaluation of intraoperative ultrasound segmentation with negative image frames and multiple observer labels. ASMUS/MICCAI, 2021. [Full text available as pre-print](https://arxiv.org/pdf/2108.04114).
+
 Skills
 ======
 * Technical Skills: Python, PyTorch, TensorFlow*, JAX*, C++*, Rust*, MATLAB*
@@ -60,12 +67,6 @@ Leadership Experience
 * Outreach Project Supervisor, In2Research & University College London, London, UK (Aug 2022 - Sep 2022)
 * Tutor, Machine Learning and Data Science, Cambridge Spark, London, UK (Jan 2022 - Jan 2024)
 * Teaching Assistant, COMP0090: Introduction to Deep Learning, University College London, London, UK (Oct 2021 - Jan 2022)
-
-Publications
-======
-* L. Chalcroft, I. Pappas, C.J. Price, J. Ashburner, Synthetic Data for Robust Stroke Segmentation. arXiv preprint, 2024. [Full text available](http://arxiv.org/abs/2404.01946v1).
-* L.F.Chalcroft, et al., LKA: Large-kernel Attention for Efficient and Robust Brain Lesion Segmentation. 37th Conference on Neural Information Processing Systems (NeurIPS), 2023. [Full text available as pre-print](https://arxiv.org/pdf/2308.07251).
-* L.F.Chalcroft, et al., Development and evaluation of intraoperative ultrasound segmentation with negative image frames and multiple observer labels. ASMUS/MICCAI, 2021. [Full text available as pre-print](https://arxiv.org/pdf/2108.04114).
 
 Grants
 ======
