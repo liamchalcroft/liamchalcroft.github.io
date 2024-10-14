@@ -26,3 +26,7 @@ author_profile: true
 ## Contributions
 
 ![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=liamchalcroft&theme=radical)
+
+## Public Library Contributions
+
+[![MONAI](https://github-readme-stats.vercel.app/api/pin/?username=Project-MONAI&repo=MONAI&theme=radical)](https://github.com/Project-MONAI/MONAI)
