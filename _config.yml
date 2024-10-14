@@ -243,6 +243,17 @@ defaults:
       layout: talk
       author_profile: true
       share: true
+  # Sitemap settings
+  - scope:
+      path: ""
+    values:
+      sitemap: false  # By default, exclude all pages from sitemap
+
+# Explicitly include specific pages in the sitemap
+include_in_sitemap:
+  - "/about/"
+  - "/cv/"
+  - "/publications/"
 
 # Sass/SCSS
 sass:
