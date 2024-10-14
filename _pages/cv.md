@@ -30,10 +30,10 @@ Publications
 
 Skills
 ======
-* Technical Skills: Python, PyTorch, TensorFlow*, JAX*, C++*, Rust*, MATLAB*
+* Technical Skills: Python, PyTorch, TensorFlow, JAX^, C++^, Rust^, MATLAB
 * Domains: Deep Learning, Computer Vision, Medical Imaging, Segmentation
 
-*Limited experience.
+^ Limited experience.
 
 Research Experience
 ======
