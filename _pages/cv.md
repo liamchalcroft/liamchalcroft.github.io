@@ -91,7 +91,7 @@ I am seeking opportunities to apply my expertise in machine learning to real-wor
 
 - Studied non-newtonian fluids for oil/gas drilling through rheology and diffusing-wave spectroscopy
 
-## Leadership Experience
+## Leadership & Teaching Experience
 
 - 🎓 Fellowship Project Supervisor, *Fatima Fellowship, London, UK (June 2023 - May 2024)*
 - 👨‍🏫 MSc Project Supervisor, *University College London, London, UK (Jan 2023 - Present)*
