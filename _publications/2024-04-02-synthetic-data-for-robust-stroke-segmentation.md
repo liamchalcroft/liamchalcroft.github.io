@@ -3,10 +3,10 @@ title: "Synthetic Data for Robust Stroke Segmentation"
 collection: publications
 permalink: /publication/2024-synthetic-data-stroke-segmentation
 excerpt: 'This paper explores the use of synthetic data for robust stroke segmentation.'
-date: 2024-04-02
-venue: 'arXiv'
-paperurl: 'http://arxiv.org/abs/2404.01946v1'
-citation: 'Chalcroft, L., Pappas, I., Price, C.J., & Ashburner, J. (2024). Synthetic Data for Robust Stroke Segmentation. <i>arXiv preprint</i>. arXiv:2404.01946v1.'
+date: 2025-01-01
+venue: 'Journal of Machine Learning for Biomedical Imaging (MELBA)'
+paperurl: 'https://www.melba-journal.org/papers/2025:014.html'
+citation: 'Chalcroft, L., Pappas, I., Price, C.J., & Ashburner, J. (2025). Synthetic Data for Robust Stroke Segmentation. <i>Journal of Machine Learning for Biomedical Imaging (MELBA)</i>, 2025:014.'
 ---
 
 ## Abstract
@@ -52,4 +52,4 @@ This paper presents a novel synthetic framework for robust stroke lesion segment
 
 The study demonstrates that it is possible to augment a SynthSeg-style training procedure to include large, heterogeneous lesions, potentially advancing medical imaging analysis in clinical settings by enabling reliable segmentation across varied imaging sequences with reduced dependency on large annotated datasets.
 
-[Download paper here](http://arxiv.org/abs/2404.01946v1)
+[Download paper here](https://www.melba-journal.org/papers/2025:014.html)

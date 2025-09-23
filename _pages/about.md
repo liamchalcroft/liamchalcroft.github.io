@@ -10,15 +10,21 @@ redirect_from:
 
 # Welcome to my academic website!
 
-I am a final year PhD student at University College London, specialising in Machine Learning for Neuroimaging. My research focuses on creating robust representations to enable the use of deep learning models in real-world open-domain settings. My PhD has focused on applying this goal to the task of stroke segmentation in clinical MRI/CT data, under the supervision of [Prof. John Ashburner](https://scholar.google.com/citations?user=UWi2lukAAAAJ&hl=en) and [Prof. Cathy J. Price](https://scholar.google.com/citations?user=gyfMndoAAAAJ&hl=en).
+I am a PhD student in Machine Learning at University College London, where I research robust deep learning methods for medical imaging under the supervision of [Prof. John Ashburner](https://scholar.google.com/citations?user=UWi2lukAAAAJ&hl=en) and [Prof. Cathy J. Price](https://scholar.google.com/citations?user=gyfMndoAAAAJ&hl=en). My work focuses on developing machine learning models that can generalise across diverse real-world settings, with particular application to stroke segmentation in clinical MRI and CT data.
+
+Currently, I work as a Spectral Computer Vision Scientist at [Prospectral](https://www.prospectral.tech), where I develop deep learning solutions for hardware design and spectral image analysis. Previously, I was a Computer Vision Researcher at [Tractive](https://www.tractive.ai), an A16Z-backed startup focused on 3D generative AI. My background includes research experience as an intern at Schlumberger Cambridge Research and undergraduate studies in Chemical Physics at the University of Bristol.
 
 ## Research Interests
 
 - Domain generalisation
 - Synthetic data
-- Semi/unupervised learning
+- Semi/unsupervised learning
 - Generative modelling
 - Uncertainty estimation
+- Spectral imaging
+- Physics-informed neural networks
+- Neural operators
+- Remote sensing
 
 My work aims to develop robust and generalisable machine learning models for medical image analysis, particularly in the context of brain pathology segmentation. This research has the potential to improve diagnosis and treatment planning in clinical settings.
 
