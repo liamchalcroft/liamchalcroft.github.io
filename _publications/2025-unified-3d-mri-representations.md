@@ -15,6 +15,7 @@ Self-supervised deep learning has accelerated 2D natural image analysis but rema
 **Code:** Available publicly
 
 ## Summary
+
 This workshop paper presents a novel self-supervised learning approach for 3D MRI analysis. The key contributions and findings include:
 
 1. **Novel SSL Framework**: Introduction of a sequence-invariant self-supervised learning framework that leverages quantitative MRI (qMRI) to learn unified 3D representations.
@@ -23,7 +24,7 @@ This workshop paper presents a novel self-supervised learning approach for 3D MR
 
 3. **Cross-Task Performance**: Demonstration of a single 3D encoder that performs well across multiple tasks including:
    - Healthy brain segmentation (IXI dataset)
-   - Stroke lesion segmentation (ARC dataset) 
+   - Stroke lesion segmentation (ARC dataset)
    - MRI denoising
 
 4. **Low-Data Efficacy**: Significant improvements in low-data settings with gains of up to +8.3% Dice score for segmentation and +4.2 dB PSNR for denoising.

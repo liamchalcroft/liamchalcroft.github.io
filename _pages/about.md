@@ -28,10 +28,10 @@ Currently, I work as a Spectral Computer Vision Scientist at [Prospectral](https
 
 My work aims to develop robust and generalisable machine learning models for medical image analysis, particularly in the context of brain pathology segmentation. This research has the potential to improve diagnosis and treatment planning in clinical settings.
 
-Currently, I am working on my PhD thesis, which explores novel approaches to domain generalisation and synthetic data generation for 3D medical image segmentation. This includes developing convolutional attention models, implementing self-supervised learning techniques, and creating physically-constrained synthetic data frameworks to enhance the performance and reliability of deep learning models in real-world clinical scenarios.
+My PhD research has focused on developing novel approaches to domain generalisation and synthetic data generation for 3D medical image segmentation. This includes creating convolutional attention models, implementing self-supervised learning techniques, and developing physically-constrained synthetic data frameworks that enhance the performance and reliability of deep learning models in real-world clinical scenarios. My work bridges the gap between theoretical machine learning advances and practical clinical deployment.
 
-## Recent Publication
+## Recent Publications
 
-My latest work, "[Synthetic Data for Robust Stroke Segmentation](publication/2024-04-02-synthetic-data-for-robust-stroke-segmentation)", explores the use of synthetic data in improving stroke segmentation techniques. This pre-print is now available on arXiv.
+My latest publications include "[Synthetic Data for Robust Stroke Segmentation](publication/2024-synthetic-data-stroke-segmentation)" published in the Journal of Machine Learning for Biomedical Imaging (MELBA), and "[DeepISLES: a clinically validated ischemic stroke segmentation model from the ISLES'22 challenge](publication/2024-robust-ensemble-ischemic-stroke-segmentation)" published in Nature Communications. I also have two new papers at MICCAI 2025 on physics-constrained synthetic data generation and sequence-invariant contrastive learning.
 
 Feel free to explore my [publications](/publications/) and [CV](/cv/) to learn more about my academic journey and research contributions.
