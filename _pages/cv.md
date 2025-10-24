@@ -33,27 +33,26 @@ I am seeking opportunities to apply my expertise in machine learning to real-wor
 
 * L. Chalcroft, J. Crinion, C.J. Price, J. Ashburner, "**[Unified 3D MRI Representations via Sequence-Invariant Contrastive Learning](/publication/2025-unified-3d-mri-representations)**." *SASHIMI/MICCAI Workshop*, 2025. [[Full text]](https://link.springer.com/chapter/10.1007/978-3-032-05573-6_7)
 
-* L.F. Chalcroft, et al., "**[LKA: Large-kernel Attention for Efficient and Robust Brain Lesion Segmentation](/publication/2023-lka-brain-lesion-segmentation)**." *37th Conference on Neural Information Processing Systems (NeurIPS)*, 2023. [[Full text]](https://arxiv.org/pdf/2308.07251) [[Code]](https://github.com/liamchalcroft/MDUNet)
+* L.F. Chalcroft, et al., "**[LKA: Large-kernel Attention for Efficient and Robust Brain Lesion Segmentation](/publication/2023-lka-brain-lesion-segmentation)**." *Medical Imaging meets NeurIPS 2023 Workshop*, 2023. [[Full text]](https://arxiv.org/pdf/2308.07251) [[Code]](https://github.com/liamchalcroft/MDUNet)
 
-* L.F. Chalcroft, et al., "**[Development and evaluation of intraoperative ultrasound segmentation with negative image frames and multiple observer labels](/publication/2021-intraoperative-ultrasound-segmentation)**." *ASMUS/MICCAI*, 2021. [[Full text]](https://arxiv.org/pdf/2108.04114) [[Code]](https://github.com/liamchalcroft/RectAngle)
+* L.F. Chalcroft, et al., "**[Development and evaluation of intraoperative ultrasound segmentation with negative image frames and multiple observer labels](/publication/2021-intraoperative-ultrasound-segmentation)**." *ASMUS - MICCAI 2021 Workshop*, 2021. [[Full text]](https://arxiv.org/pdf/2108.04114) [[Code]](https://github.com/liamchalcroft/RectAngle)
 
 ## Skills
 
 **Technical Skills**: Python, PyTorch, TensorFlow, JAX*, C++*, Rust*, MATLAB
 
-**Domains**: Deep Learning, Computer Vision, Medical Imaging, Segmentation, Spectral Imaging, Remote Sensing, Physics-informed Neural Networks, Neural Operators
+**Domains**: Deep Learning, Computer Vision, Medical Imaging, Segmentation, Spectral Imaging, Physics-informed AI
 
 *Limited experience
 
 ## Research Experience
 
-### Spectral Computer Vision Scientist (Founding Engineer)
-*Prospectral, London, UK (Nov 2024 - Present)*
+### Founding Computer Vision Scientist
+*Prospectral, London, UK (Feb 2025 - Present)*
 
-- Founding engineer developing novel spectral imaging solutions for agriculture and environmental monitoring
-- Leading development of physics-informed neural networks for spectral data analysis
-- Implementing neural operators for real-time spectral processing and remote sensing applications
+- Leading machine learning and AI integration and research
 - Building production systems combining computer vision, spectral analysis, and machine learning
+- Managing technical strategy for spectral imaging AI applications
 
 ### Computer Vision Researcher
 *[Tractive](https://www.tractive.ai), London, UK (Jan 2024 - Oct 2024)*
@@ -103,16 +102,16 @@ I am seeking opportunities to apply my expertise in machine learning to real-wor
 Talks
 ======
   <ul>{% for post in site.talks %}
-    {% include archive-single-talk-cv.html %}
+    {% include archive-single.html format="talk-cv" %}
   {% endfor %}</ul>
-  
+
 Teaching
 ======
   <ul>{% for post in site.teaching %}
-    {% include archive-single-cv.html %}
+    {% include archive-single.html format="cv" %}
   {% endfor %}</ul>
-  
+
 Service and leadership
 ======
-* 
+*
 -->
