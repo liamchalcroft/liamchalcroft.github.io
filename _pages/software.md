@@ -4,7 +4,9 @@ title: "Software"
 permalink: /software/
 excerpt: "Open-source libraries, models and paper code."
 redirect_from:
+  - /open-source
   - /open-source/
+  - /open-source.html
 ---
 
 Everything below is on [GitHub](https://github.com/liamchalcroft) under a permissive licence.

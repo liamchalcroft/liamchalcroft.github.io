@@ -5,6 +5,8 @@ permalink: /cv/
 excerpt: "Education, research experience, teaching and grants."
 redirect_from:
   - /resume
+  - /resume/
+  - /resume.html
 ---
 
 Machine learning researcher working on medical and spectral imaging. My research is on models that generalise beyond their training distribution: domain generalisation, physics-constrained synthetic data, and self-supervised pre-training for 3D imaging. Currently applying that work to spectral imaging as Founding Computer Vision Scientist at Prospectral.

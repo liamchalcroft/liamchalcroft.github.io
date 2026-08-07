@@ -2,7 +2,7 @@
 permalink: /
 title: "Liam Chalcroft"
 hide_title: true
-excerpt: "Founding Computer Vision Scientist at Prospectral. PhD in machine learning for medical imaging, UCL."
+excerpt: "Founding Computer Vision Scientist at Prospectral. PhD in machine learning for medical imaging, University College London."
 redirect_from:
   - /about/
   - /about.html
