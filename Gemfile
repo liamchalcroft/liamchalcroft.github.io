@@ -25,3 +25,7 @@ group :jekyll_plugins do
   gem 'jekyll-sitemap'
   gem 'hawkins'
 end
+
+# Bundled out of the stdlib as of Ruby 3.4; Jekyll 3.x still requires them directly.
+gem "csv"
+gem "base64"

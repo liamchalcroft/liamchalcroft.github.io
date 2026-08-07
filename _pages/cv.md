@@ -2,116 +2,174 @@
 layout: archive
 title: "Curriculum Vitae"
 permalink: /cv/
-author_profile: true
+excerpt: "Education, research experience, teaching and grants."
 redirect_from:
   - /resume
 ---
 
-{% include base_path %}
+Machine learning researcher working on medical and spectral imaging. My research is on models that generalise beyond their training distribution: domain generalisation, physics-constrained synthetic data, and self-supervised pre-training for 3D imaging. Currently applying that work to spectral imaging as Founding Computer Vision Scientist at Prospectral.
 
-## Profile
+## Experience
 
-I am a PhD student specialising in Machine Learning and Medical Image Analysis, with hands-on experience in both academic research and industry. My expertise spans deep learning, computer vision, medical imaging, large-scale ML research, 3D generative AI models, and medical image segmentation.
-
-I am seeking opportunities to apply my expertise in machine learning to real-world challenges in applied research within academia, industry, or startups.
+<ul class="cv-rows">
+  <li class="cv-row">
+    <div class="cv-row__when">2025 &ndash; present</div>
+    <div class="cv-row__what">
+      <strong>Founding Computer Vision Scientist</strong>
+      <span><a href="https://www.prospectral.tech">Prospectral</a>, London</span>
+      <ul>
+        <li>Lead machine learning research and its integration into the wider product.</li>
+        <li>Build production systems spanning spectral sensing, computer vision and model deployment.</li>
+        <li>Own technical strategy for spectral imaging AI.</li>
+      </ul>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">2024</div>
+    <div class="cv-row__what">
+      <strong>Computer Vision Researcher</strong>
+      <span><a href="https://www.tractive.ai">Tractive</a>, London</span>
+      <ul>
+        <li>Led ML research at an a16z-backed pre-seed startup applying 3D generative AI to retopology.</li>
+        <li>Trained transformers at scale with PyTorch and FSDP on Google Cloud.</li>
+        <li>Wrote production backend code in C++ and Rust.</li>
+      </ul>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">2021 &ndash; 2026</div>
+    <div class="cv-row__what">
+      <strong>PhD Researcher</strong>
+      <span>Wellcome Centre for Human Neuroimaging, University College London</span>
+      <ul>
+        <li>Built a physics-constrained synthetic data framework for stroke lesion segmentation that transfers to unseen clinical scanners and sequences.</li>
+        <li>Designed convolutional attention architectures for 3D segmentation, presented at NeurIPS 2023.</li>
+        <li>Developed sequence-invariant contrastive pre-training for 3D MRI encoders.</li>
+        <li>Contributed to the ISLES'22 challenge ensemble published in <em>Nature Communications</em>.</li>
+      </ul>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">2020 &ndash; 2021</div>
+    <div class="cv-row__what">
+      <strong>MRes Researcher</strong>
+      <span>University College London</span>
+      <ul>
+        <li>Built hypernetwork-based segmentation conditioned on imaging domain.</li>
+        <li>Studied image-level false positives in segmentation, published at MICCAI 2021.</li>
+      </ul>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">2018 &ndash; 2019</div>
+    <div class="cv-row__what">
+      <strong>Research Scientist, Intern</strong>
+      <span>Schlumberger Cambridge Research, Cambridge</span>
+      <ul>
+        <li>Characterised non-Newtonian drilling fluids by rheology and diffusing-wave spectroscopy.</li>
+      </ul>
+    </div>
+  </li>
+</ul>
 
 ## Education
 
-- **Ph.D in Machine Learning**, University College London, 2021 - Present
-  - Supervisors: Prof. John Ashburner, Prof. Cathy J. Price FRS
-- **MRes in Medical Imaging** (*Distinction*), University College London, 2020 - 2021
-  - *Key modules*: Inverse Problems in Imaging (81%), Machine Learning in Medical Imaging (87%)
-- **MSci in Chemical Physics** (*1st Class Honours*), University of Bristol, 2016 - 2020
+<ul class="cv-rows">
+  <li class="cv-row">
+    <div class="cv-row__when">2021 &ndash; 2026</div>
+    <div class="cv-row__what">
+      <strong>PhD, Machine Learning</strong>
+      <span>University College London</span>
+      <ul>
+        <li>Thesis: <a href="https://discovery.ucl.ac.uk/id/eprint/10220048/">Robust Deep Learning for Stroke Detection in Clinical Neuroimaging</a>.</li>
+        <li>Supervised by Prof. John Ashburner and Prof. Cathy J. Price FRS.</li>
+      </ul>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">2020 &ndash; 2021</div>
+    <div class="cv-row__what">
+      <strong>MRes, Medical Imaging</strong>
+      <span>University College London &middot; Distinction</span>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">2016 &ndash; 2020</div>
+    <div class="cv-row__what">
+      <strong>MSci, Chemical Physics</strong>
+      <span>University of Bristol &middot; First Class Honours</span>
+    </div>
+  </li>
+</ul>
 
-## Publications
+## Teaching and supervision
 
-* L. Chalcroft, I. Pappas, C.J. Price, J. Ashburner, "**[Synthetic Data for Robust Stroke Segmentation](/publication/2024-synthetic-data-stroke-segmentation)**." *Journal of Machine Learning for Biomedical Imaging (MELBA)*, 2025. [[Full text]](https://www.melba-journal.org/papers/2025:014.html) [[Code]](https://github.com/liamchalcroft/SynthStroke)
-
-* E. de la Rosa, et al. (including L. Chalcroft), "**[DeepISLES: a clinically validated ischemic stroke segmentation model from the ISLES'22 challenge](/publication/2024-robust-ensemble-ischemic-stroke-segmentation)**." *Nature Communications*, 2025. [[Full text]](https://www.nature.com/articles/s41467-025-62373-x) [[Code]](https://github.com/ezequieldlrosa/DeepIsles)
-
-* L. Chalcroft, J. Crinion, C.J. Price, J. Ashburner, "**[Domain-Agnostic Stroke Lesion Segmentation Using Physics-Constrained Synthetic Data](/publication/2025-domain-agnostic-stroke-lesion-segmentation)**." *MICCAI*, 2025. [[Full text]](https://link.springer.com/chapter/10.1007/978-3-032-04965-0_16) [[Code]](https://github.com/liamchalcroft/qsynth)
-
-* L. Chalcroft, J. Crinion, C.J. Price, J. Ashburner, "**[Unified 3D MRI Representations via Sequence-Invariant Contrastive Learning](/publication/2025-unified-3d-mri-representations)**." *SASHIMI/MICCAI Workshop*, 2025. [[Full text]](https://link.springer.com/chapter/10.1007/978-3-032-05573-6_7)
-
-* L.F. Chalcroft, et al., "**[LKA: Large-kernel Attention for Efficient and Robust Brain Lesion Segmentation](/publication/2023-lka-brain-lesion-segmentation)**." *Medical Imaging meets NeurIPS 2023 Workshop*, 2023. [[Full text]](https://arxiv.org/pdf/2308.07251) [[Code]](https://github.com/liamchalcroft/MDUNet)
-
-* L.F. Chalcroft, et al., "**[Development and evaluation of intraoperative ultrasound segmentation with negative image frames and multiple observer labels](/publication/2021-intraoperative-ultrasound-segmentation)**." *ASMUS - MICCAI 2021 Workshop*, 2021. [[Full text]](https://arxiv.org/pdf/2108.04114) [[Code]](https://github.com/liamchalcroft/RectAngle)
-
-## Skills
-
-**Technical Skills**: Python, PyTorch, TensorFlow, JAX*, C++*, Rust*, MATLAB
-
-**Domains**: Deep Learning, Computer Vision, Medical Imaging, Segmentation, Spectral Imaging, Physics-informed AI
-
-*Limited experience
-
-## Research Experience
-
-### Founding Computer Vision Scientist
-*Prospectral, London, UK (Feb 2025 - Present)*
-
-- Leading machine learning and AI integration and research
-- Building production systems combining computer vision, spectral analysis, and machine learning
-- Managing technical strategy for spectral imaging AI applications
-
-### Computer Vision Researcher
-*[Tractive](https://www.tractive.ai), London, UK (Jan 2024 - Oct 2024)*
-
-- Led ML research for A16Z-backed pre-seed startup using 3D Generative AI for Retopology
-- Translated research from both 3D graphics and generative AI literature
-- Conducted large-scale training of transformers using PyTorch and FSDP on Google Cloud VMs
-- Wrote production backend code in C++ and Rust
-
-### PhD Research Student
-*University College London, London, UK (Aug 2021 - Present)*
-
-- Developed physically-constrained synthetic data framework for robust deep learning in medical imaging
-- Created convolutional attention models for 3D medical image segmentation; presented at NeurIPS 2023
-- Authored PyTorch library (ssUNet) for 3D contrastive learning in medical imaging
-- Applied synthetic data and novel VAE models to stroke lesion segmentation tasks
-- Enhanced hypernetworks with self-supervised learning for diverse domain adaptation
-- Implemented 3D VD-VAE for normative modeling and anomaly detection in medical imaging
-
-### MRes Research Student
-*University College London, London, UK (Sept 2020 - Aug 2021)*
-
-- Developed robust segmentation algorithms using hypernetworks for domain-specific medical imaging
-- Created custom PyTorch library for CNNs, hypernetworks, adversarial training, and t-SNE visualisation
-- Researched image-level false-positives in segmentation, resulting in publication at MICCAI
-
-### Research Scientist (Intern)
-*Schlumberger Cambridge Research, Cambridge, UK (Aug 2018 - Aug 2019)*
-
-- Studied non-newtonian fluids for oil/gas drilling through rheology and diffusing-wave spectroscopy
-
-## Leadership & Teaching Experience
-
-- Fellowship Project Supervisor, *Fatima Fellowship, London, UK (June 2023 - May 2024)*
-- MSc Project Supervisor, *University College London, London, UK (Jan 2023 - Present)*
-- Research Supervisor, *University College London, London, UK (Sep 2022 - Present)*
-- Outreach Project Supervisor, *In2Research & University College London, London, UK (Aug 2022 - Sep 2022)*
-- Tutor, Machine Learning and Data Science, *Cambridge Spark, London, UK (Jan 2022 - Jan 2024)*
-- Teaching Assistant, COMP0090: Introduction to Deep Learning, *University College London, London, UK (Oct 2021 - Jan 2022)*
+<ul class="cv-rows">
+  <li class="cv-row">
+    <div class="cv-row__when">2023 &ndash; 2024</div>
+    <div class="cv-row__what">
+      <strong>Fellowship Project Supervisor</strong>
+      <span>Fatima Fellowship</span>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">2022 &ndash; 2026</div>
+    <div class="cv-row__what">
+      <strong>MSc Project and Research Supervisor</strong>
+      <span>University College London</span>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">2022 &ndash; 2024</div>
+    <div class="cv-row__what">
+      <strong>Tutor, Machine Learning and Data Science</strong>
+      <span>Cambridge Spark</span>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">2022</div>
+    <div class="cv-row__what">
+      <strong>Outreach Project Supervisor</strong>
+      <span>In2Research and University College London</span>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">2021</div>
+    <div class="cv-row__what">
+      <strong>Teaching Assistant and Guest Lecturer</strong>
+      <span>COMP0090 Introduction to Deep Learning, University College London</span>
+    </div>
+  </li>
+</ul>
 
 ## Grants
 
-- NVIDIA Academic Hardware Grant. Estimated value £5000.
-- Google GCP, estimated value $1000.
+<ul class="cv-rows">
+  <li class="cv-row">
+    <div class="cv-row__when">Hardware</div>
+    <div class="cv-row__what">
+      <strong>NVIDIA Academic Hardware Grant</strong>
+      <span>Estimated value &pound;5,000</span>
+    </div>
+  </li>
+  <li class="cv-row">
+    <div class="cv-row__when">Cloud</div>
+    <div class="cv-row__what">
+      <strong>Google Cloud research credits</strong>
+      <span>Estimated value $1,000</span>
+    </div>
+  </li>
+</ul>
 
-<!-- Uncomment and add sections as needed
-Talks
-======
-  <ul>{% for post in site.talks %}
-    {% include archive-single.html format="talk-cv" %}
-  {% endfor %}</ul>
+## Technical
 
-Teaching
-======
-  <ul>{% for post in site.teaching %}
-    {% include archive-single.html format="cv" %}
-  {% endfor %}</ul>
+**Languages** Python, Rust, C++, MATLAB
 
-Service and leadership
-======
-*
--->
+**Frameworks** PyTorch, MONAI, SPM
+
+**Domains** Medical image analysis, domain generalisation, synthetic data, self-supervised learning, generative modelling, spectral imaging
+
+<div class="btn-row">
+  <a class="btn" href="/publications/">Publications</a>
+  <a class="btn" href="/software/">Software</a>
+</div>

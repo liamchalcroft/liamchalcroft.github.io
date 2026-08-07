@@ -1,0 +1,164 @@
+/* ==========================================================================
+   Page shell: masthead, main column, footer
+   ========================================================================== */
+
+.wrap {
+  width: 100%;
+  max-width: var(--page);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* Masthead
+   ========================================================================== */
+
+.masthead {
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+
+  &__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-4);
+  }
+
+  &__name {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--accent);
+    }
+  }
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li { margin: 0; }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    font-family: var(--font-ui);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+
+    &:hover {
+      color: var(--ink);
+      border-bottom-color: var(--accent);
+    }
+
+    &[aria-current='page'] {
+      color: var(--ink);
+      border-bottom-color: var(--rule-strong);
+    }
+  }
+}
+
+/* Main column
+   ========================================================================== */
+
+.page {
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-7);
+}
+
+.page__inner {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+
+.page__title {
+  margin-bottom: var(--space-5);
+}
+
+/* Vertical rhythm for long-form prose */
+
+.prose {
+  > h2 {
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  > h3 {
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+  }
+
+  > h4 {
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-1);
+  }
+
+  > *:first-child { margin-top: 0; }
+
+  > ul, > ol { margin-bottom: var(--space-4); }
+}
+
+/* Footer
+   ========================================================================== */
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-6);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--muted);
+
+  &__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    color: var(--muted);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--accent);
+    }
+  }
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li { margin: 0; }
+}

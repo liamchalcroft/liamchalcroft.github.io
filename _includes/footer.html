@@ -1,0 +1,15 @@
+{% include base_path %}
+{% assign a = site.author %}
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <p style="margin:0">&copy; {{ site.time | date: '%Y' }} {{ a.name }}{% if a.location %} &middot; {{ a.location }}{% endif %}</p>
+    <ul class="footer-links">
+      {% if a.email %}<li><a href="mailto:{{ a.email }}">Email</a></li>{% endif %}
+      {% if a.github %}<li><a href="https://github.com/{{ a.github }}" rel="me">GitHub</a></li>{% endif %}
+      {% if a.googlescholar %}<li><a href="{{ a.googlescholar }}" rel="me">Scholar</a></li>{% endif %}
+      {% if a.orcid %}<li><a href="{{ a.orcid }}" rel="me">ORCID</a></li>{% endif %}
+      {% if a.linkedin %}<li><a href="https://www.linkedin.com/in/{{ a.linkedin }}" rel="me">LinkedIn</a></li>{% endif %}
+    </ul>
+  </div>
+</footer>
