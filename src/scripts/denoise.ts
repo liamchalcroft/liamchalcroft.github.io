@@ -18,7 +18,7 @@
  * Without JS, or with reduced motion, the text is simply clean.
  */
 
-import { formatSeed, hashString, mulberry32, parseSeed } from '../lib/scan/prng';
+import { formatSeed, hashString, mulberry32, parseSeed } from '../lib/prng';
 
 const LEVELS = 7; // 1–6 map to Redaction 10…100; 7 is a substituted glyph in Redaction 100
 const SPREAD = 0.85; // how far apart glyphs resolve within one sample

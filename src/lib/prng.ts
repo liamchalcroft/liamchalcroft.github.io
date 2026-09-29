@@ -1,4 +1,4 @@
-/** Seeded randomness. Everything generative on the site is a pure function of a 32-bit seed. */
+/** Seeded randomness for the heading animation. */
 
 export type Rng = () => number;
 
@@ -20,15 +20,6 @@ export function hashString(s: string): number {
     h = Math.imul(h, 0x01000193);
   }
   return h >>> 0;
-}
-
-export const range = (r: Rng, lo: number, hi: number) => lo + (hi - lo) * r();
-export const pick = <T>(r: Rng, xs: readonly T[]): T => xs[Math.floor(r() * xs.length)]!;
-
-/** Standard normal via Box-Muller. */
-export function gaussian(r: Rng): number {
-  const u = Math.max(r(), 1e-12);
-  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * r());
 }
 
 export const formatSeed = (seed: number) => (seed >>> 0).toString(16).padStart(8, '0');

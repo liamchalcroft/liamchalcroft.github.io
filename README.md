@@ -10,12 +10,6 @@ The design is called *Timesteps*. The site is set in one typeface, [Redaction](h
 - The clean text always holds the layout, and noisy glyphs are drawn as overlays, so lines never reflow. With JS off, or with reduced motion, text is simply clean.
 - Append `?seed=84cb3841` to reproduce a sample.
 
-The home page's one figure, `src/components/SynthFigure.astro`, is a live version of the PhD method:
-
-1. A procedural brain phantom is generated as tissue labels (`src/lib/scan/phantom.ts`).
-2. It is pushed through an MRI signal equation, or through random SynthSeg-style intensities (`src/lib/scan/physics.ts`).
-3. This runs in a Web Worker.
-
 ## Working on it
 
 ```sh

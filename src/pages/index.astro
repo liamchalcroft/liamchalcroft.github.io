@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import SynthFigure from '../components/SynthFigure.astro';
 import { site, authorsHtml, year } from '../lib/site';
 import { libraries } from '../data/software';
 import { talks } from '../data/talks';
@@ -70,8 +69,6 @@ const log = [
       {site.citations.count} citations on <a href={site.links.scholar}>Google Scholar</a> ({site.citations.asOf}).
     </p>
   </section>
-
-  <SynthFigure />
 
   <section class="section wide" aria-labelledby="papers">
     <h2 class="h2" id="papers" data-denoise="scroll" data-denoise-hover>Selected papers</h2>
