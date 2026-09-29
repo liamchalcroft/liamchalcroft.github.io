@@ -9,6 +9,7 @@ authors:
   - "A.S. Kayser"
   - "M. D'Esposito"
   - "C.J. Price"
+  - "I. Pappas"
   - "J. Ashburner"
 venue: "Medical Imaging meets NeurIPS 2023 Workshop"
 venueShort: "NeurIPS MedImg 2023"

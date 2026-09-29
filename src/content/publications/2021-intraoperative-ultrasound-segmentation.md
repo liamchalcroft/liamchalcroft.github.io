@@ -9,7 +9,12 @@ authors:
   - "I.J.M.B. Gayo"
   - "G.V. Minore"
   - "I.R.D. Singh"
-etAl: true
+  - "S.U. Saeed"
+  - "Q. Yang"
+  - "Z.M.C. Baum"
+  - "A. Altmann"
+  - "Y. Hu"
+etAl: false
 venue: "Advances in Simplifying Medical Ultrasound (ASMUS), MICCAI 2021 Workshop"
 venueShort: "ASMUS 2021"
 kind: workshop

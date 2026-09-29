@@ -14,9 +14,30 @@ export const libraries: Project[] = [
     html: 'Agentic framework for medical vision-language models: viewer-level image tools, multi-turn tool use, and literature retrieval from PubMed and Open-i. Published on <a href="https://pypi.org/project/gaze-vlm/">PyPI</a> as <code>gaze-vlm</code>.',
     paper: '2026-gaze-grounded-agentic-zero-shot-evaluation',
   },
+  {
+    name: 'medtokenizers',
+    url: 'https://github.com/liamchalcroft/medtokenizers',
+    tags: ['Python', 'PyTorch'],
+    html: 'Tokenizers for 2D and 3D medical images behind one encoder–decoder interface: VQ, LFQ, FSQ, residual FSQ, VAE and AE heads. Published on <a href="https://pypi.org/project/medtokenizers/">PyPI</a>.',
+    paper: '2026-tokenizer-generator-coupling',
+  },
+  {
+    name: 'medlatents',
+    url: 'https://github.com/liamchalcroft/medlatents',
+    tags: ['Python', 'PyTorch'],
+    html: 'Generative models over tokenized medical images: autoregressive transformers, MaskGIT, discrete diffusion (D3PM), discrete flow matching, Bayesian flow networks, latent diffusion and rectified flow. Published on <a href="https://pypi.org/project/medlatents/">PyPI</a>.',
+    paper: '2026-tokenizer-generator-coupling',
+  },
 ];
 
 export const paperCode: Project[] = [
+  {
+    name: 'tokenizer-generator-coupling',
+    url: 'https://github.com/liamchalcroft/tokenizer-generator-coupling',
+    tags: ['Python', 'NeurIPS 2026'],
+    html: 'Reproduction code, result data and figure scripts for the tokenizer–generator coupling study.',
+    paper: '2026-tokenizer-generator-coupling',
+  },
   {
     name: 'SynthStroke',
     url: 'https://github.com/liamchalcroft/SynthStroke',
