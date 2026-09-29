@@ -1,52 +1,30 @@
 # liamchalcroft.github.io
 
-Personal academic site for Liam Chalcroft, built with Jekyll and deployed by GitHub Pages.
+Personal site of Dr Liam Chalcroft. Astro + TypeScript, deployed to GitHub Pages by GitHub Actions.
 
-Originally forked from [academicpages](https://github.com/academicpages/academicpages.github.io), which derives from the [Minimal Mistakes](https://mmistakes.github.io/minimal-mistakes/) theme (© 2016 Michael Rose, MIT). The theme layer has since been replaced; see `LICENSE`.
+The design is called *Timesteps*. The site is set in one typeface, [Redaction](https://github.com/jeremymickel/Redaction), which comes in seven levels of bitmap degradation. Display text is sampled from noise glyph by glyph (`src/scripts/denoise.ts`):
 
-## Structure
+- Every glyph gets its own offset in the noise schedule from a seeded PRNG, so words resolve unevenly, as a real diffusion sample does.
+- The hero sentence is sampled when the page opens. Headings follow their scroll position, so they are noisy low on the screen and clean by mid-screen.
+- Hovering a heading resamples it. Clicking an internal link runs the forward process before navigating.
+- The clean text always holds the layout, and noisy glyphs are drawn as overlays, so lines never reflow. With JS off, or with reduced motion, text is simply clean.
+- Append `?seed=84cb3841` to reproduce a sample.
 
-| Path | Contents |
-| --- | --- |
-| `_pages/` | Home, publications, software, CV, sitemap, 404 |
-| `_publications/` | One file per paper. Front matter drives the listing and detail pages |
-| `_data/navigation.yml` | Top navigation |
-| `_layouts/`, `_includes/` | Page shell |
-| `_sass/` | `_tokens` (design tokens), `_base`, `_layout`, `_components`, `_syntax`, `_print` |
-| `assets/css/main.scss` | Stylesheet entry point |
-
-## Running locally
-
-GitHub Pages pins Jekyll 3.x, which needs Ruby 3.3 or older. Ruby 3.4 removed `csv` and `base64` from the standard library and Ruby 3.2 removed `Object#tainted?`, which the pinned Liquid version calls.
+## Working on it
 
 ```sh
-brew install ruby@3.3
-export PATH="/opt/homebrew/opt/ruby@3.3/bin:$PATH"
-bundle install
-bundle exec jekyll serve
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # type-checks, then builds to dist/
 ```
 
-The site is then at <http://127.0.0.1:4000>.
+- **Add a paper:** create `src/content/publications/<slug>.md` (the schema is in `src/content.config.ts`; the filename is the URL). The home page, publications page, detail page, BibTeX, Scholar meta tags, feed and sitemap all update from that file. Set `selected: true` to put it on the home page.
+- **Add a talk:** edit `src/data/talks.ts`.
+- **CV, software, milestones:** `src/data/cv.ts`, `src/data/software.ts`, `src/data/log.ts`.
 
-## Adding a publication
+## Deploying
 
-Create `_publications/<year>-<slug>.md`:
+`.github/workflows/deploy.yml` builds on every push and PR, and deploys pushes to `master`.
+**One-time setup:** in the repository's *Settings → Pages*, set *Source* to **GitHub Actions**. Until then GitHub keeps trying to build the repo with Jekyll.
 
-```yaml
----
-title: "Paper title"
-collection: publications
-permalink: /publication/<year>-<slug>
-date: 2026-01-01
-authors: 'A. Author, L. Chalcroft'
-venue: 'Venue name'
-paperurl: 'https://...'
-arxiv: 'https://arxiv.org/abs/...'
-code: 'https://github.com/...'
-citation: 'Full citation.'
----
-
-Abstract text.
-```
-
-Then add a matching `<li class="entry">` block to `_pages/publications.md`, and to `_pages/about.md` if it belongs in the selected list.
+See [docs/custom-domain.md](docs/custom-domain.md) for moving to a custom domain.

@@ -1,0 +1,22 @@
+---
+import { site } from '../lib/site';
+const y = new Date().getFullYear();
+---
+
+<footer class="foot wide with-note">
+  <div>
+    <ul class="foot__links">
+      <li><a href={`mailto:${site.email}`}>Email</a></li>
+      <li><a href={site.links.scholar} rel="me">Scholar</a></li>
+      <li><a href={site.links.github} rel="me">GitHub</a></li>
+      <li><a href={site.links.orcid} rel="me">ORCID</a></li>
+      <li><a href={site.links.linkedin} rel="me">LinkedIn</a></li>
+      <li><a href={site.links.twitter} rel="me">X</a></li>
+    </ul>
+    <p class="small muted" style="margin-top:1rem; max-width:34rem">
+      Set in <a href="https://github.com/jeremymickel/Redaction">Redaction</a> by Jeremy Mickel, commissioned for <cite>The Redaction</cite>{' '}
+      (Titus Kaphar and Reginald Dwayne Betts, MoMA PS1, 2019). The site uses its degraded cuts for the heading animation.
+    </p>
+  </div>
+  <p class="note">© {y} {site.name}<br />London</p>
+</footer>

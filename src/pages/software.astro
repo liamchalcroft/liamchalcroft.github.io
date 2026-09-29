@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { site } from '../lib/site';
+import { libraries, paperCode, upstream } from '../data/software';
+import type { Project } from '../data/types';
+
+const pubs = await getCollection('publications');
+const byId = new Map(pubs.map((p) => [p.id, p]));
+
+const sections: { title: string; id: string; items: Project[] }[] = [
+  { title: 'Libraries', id: 'libraries', items: libraries },
+  { title: 'Paper code', id: 'paper-code', items: paperCode },
+  { title: 'Upstream contributions', id: 'upstream', items: upstream },
+];
+---
+
+<Base
+  title="Software"
+  description="Open-source libraries, paper code and upstream contributions by Liam Chalcroft: medical imaging in Rust and Python, synthetic MRI, and agentic medical VLMs."
+>
+  <header class="intro wide with-note">
+    <div>
+      <h1 class="display" data-denoise="load" data-key="software">Software</h1>
+      <p class="lede intro__text">
+        Libraries I maintain, the code behind each paper, and fixes I have sent upstream. Everything is permissively licensed and on{' '}
+        <a href={site.links.github} rel="me">GitHub</a>.
+      </p>
+    </div>
+  </header>
+
+  {sections.map((s) => (
+    <section class="section wide" aria-labelledby={s.id}>
+      <h2 class="h2" id={s.id} data-denoise="scroll" data-denoise-hover>{s.title}</h2>
+      <ul class="work">
+        {s.items.map((p) => {
+          const paper = p.paper ? byId.get(p.paper) : undefined;
+          return (
+            <li class="work__item with-note">
+              <div>
+                <h3 class="h3"><a href={p.url} data-denoise="scroll" data-key={p.name}>{p.name}</a></h3>
+                <p class="work__meta small" set:html={p.html} />
+                {paper && (
+                  <p class="work__links small">
+                    <a href={`/publication/${paper.id}/`}>paper: {paper.data.shortTitle}</a>
+                  </p>
+                )}
+              </div>
+              {p.tags.length > 0 && <p class="note tag">{p.tags.join(', ')}</p>}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  ))}
+</Base>
+
+<style>
+  .intro { padding-top: clamp(2.5rem, 8vh, 6rem); }
+  .intro__text { margin-top: clamp(1.2rem, 2.5vw, 2rem); max-width: 30em; }
+  .work__meta :global(code) { font: inherit; font-style: italic; }
+</style>

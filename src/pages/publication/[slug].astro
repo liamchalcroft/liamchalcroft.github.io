@@ -1,0 +1,198 @@
+---
+import { getCollection } from 'astro:content';
+import type { InferGetStaticPropsType } from 'astro';
+import Base from '../../layouts/Base.astro';
+import { authorsHtml, SELF, site, year } from '../../lib/site';
+import { toBibtex } from '../../lib/bibtex';
+
+export async function getStaticPaths() {
+  const pubs = (await getCollection('publications')).sort((a, b) => +b.data.date - +a.data.date);
+  return pubs.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, newer: pubs[i - 1], older: pubs[i + 1] },
+  }));
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { entry, newer, older } = Astro.props as Props;
+const d = entry.data;
+const b = d.bib;
+const hasAbstract = Boolean(entry.body?.trim());
+// The abstract is set with a run-in "Abstract" label, so inject it into the first paragraph.
+const abstractHtml = hasAbstract
+  ? (entry.rendered?.html ?? '').replace(/^\s*<p>/, '<p><i class="runin">Abstract.</i> ')
+  : '';
+const bibtex = toBibtex(entry);
+const url = new URL(`/publication/${entry.id}/`, site.url).href;
+
+// Google Scholar (Highwire) metadata.
+const scholarAuthor = (a: string) => (a === SELF ? 'Chalcroft, Liam' : a);
+const iso = d.date.toISOString().slice(0, 10).replace(/-/g, '/');
+const [firstPage, lastPage] = (b.pages ?? '').split(/\s*[-–—]+\s*/).filter(Boolean);
+const paperLink = d.links.paper ?? d.links.arxiv ?? d.links.pdf;
+const description = hasAbstract
+  ? entry.body!.replace(/\s+/g, ' ').trim().slice(0, 240).replace(/\s\S*$/, '') + '…'
+  : `${d.title}. ${d.venue}.`;
+
+const kindWord = { journal: 'journal paper', conference: 'conference paper', workshop: 'workshop paper', thesis: 'thesis' }[d.kind];
+const links = [
+  d.links.paper && { label: 'paper', url: d.links.paper },
+  d.links.arxiv && { label: 'arXiv', url: d.links.arxiv },
+  d.links.code && { label: 'code', url: d.links.code },
+  ...d.links.extra,
+].filter(Boolean) as { label: string; url: string }[];
+---
+
+<Base title={d.title} description={description} ogType="article">
+  <Fragment slot="head">
+    <meta name="citation_title" content={d.title} />
+    {d.authors.map((a) => <meta name="citation_author" content={scholarAuthor(a)} />)}
+    <meta name="citation_publication_date" content={iso} />
+    {b.type === 'article' && <meta name="citation_journal_title" content={b.container} />}
+    {b.type === 'inproceedings' && <meta name="citation_conference_title" content={b.container} />}
+    {b.type === 'phdthesis' && <meta name="citation_dissertation_institution" content={b.school ?? b.container} />}
+    {b.volume && <meta name="citation_volume" content={b.volume} />}
+    {b.number && <meta name="citation_issue" content={b.number} />}
+    {firstPage && <meta name="citation_firstpage" content={firstPage} />}
+    {lastPage && <meta name="citation_lastpage" content={lastPage} />}
+    {b.publisher && <meta name="citation_publisher" content={b.publisher} />}
+    {d.doi && <meta name="citation_doi" content={d.doi} />}
+    {d.links.pdf && <meta name="citation_pdf_url" content={d.links.pdf} />}
+    <meta name="citation_abstract_html_url" content={url} />
+  </Fragment>
+
+  <article class="paper" aria-labelledby="paper-title">
+    <header class="paper__head wide with-note">
+      <div>
+        <h1 class="paper__title" id="paper-title" data-denoise="load" data-key={entry.id}>{d.title}</h1>
+        <p class="paper__authors" set:html={authorsHtml(d.authors, d.etAl)} />
+        <p class="paper__venue">
+          <cite>{d.venue}</cite>{d.badge && <>, {d.badge.toLowerCase()}</>}.
+          {d.note && <> {d.note}</>}
+        </p>
+        <p class="work__links paper__links">
+          {links.map((l) => <a href={l.url}>{l.label}</a>)}
+          {d.doi && <a href={`https://doi.org/${d.doi}`}>DOI</a>}
+        </p>
+      </div>
+      <p class="note record">
+        <span><i>Year</i> {year(d.date)}</span>
+        <span><i>Kind</i> {kindWord}</span>
+        <span><i>Venue</i> {b.container}</span>
+        {b.volume && <span><i>Volume</i> {b.volume}</span>}
+        {b.number && <span><i>Issue</i> {b.number}</span>}
+        {b.pages && <span><i>Pages</i> {b.pages}</span>}
+        {d.doi && <span><i>DOI</i> <a href={`https://doi.org/${d.doi}`}>{d.doi}</a></span>}
+      </p>
+    </header>
+
+    <div class="paper__abstract prose">
+      {hasAbstract
+        ? <Fragment set:html={abstractHtml} />
+        : <p>
+            {paperLink ? <>Abstract to follow; the paper is at <a href={paperLink}>{new URL(paperLink).host}</a>.</> : <>Abstract to follow.</>}
+          </p>}
+    </div>
+
+    {d.figure && (
+      <figure class="paper__figure wide with-note">
+        <img src={d.figure.src} width={d.figure.width} height={d.figure.height} alt={d.figure.alt} loading="lazy" decoding="async" />
+        <figcaption class="note">
+          <i>Figure from the paper.</i>{d.figure.caption ? ` ${d.figure.caption}` : ''}
+        </figcaption>
+      </figure>
+    )}
+
+    <section class="paper__cite" aria-label="Cite this paper">
+      <div class="paper__citebar">
+        <p class="faint"><i>Cite</i></p>
+        <button class="button no-print" type="button" id="copy-bib" data-label="Copy BibTeX">Copy BibTeX</button>
+      </div>
+      <pre class="paper__pre" id="bibtex"><code>{bibtex}</code></pre>
+    </section>
+
+    <nav class="paper__pager no-print" aria-label="Other papers">
+      {newer ? <a href={`/publication/${newer.id}/`} rel="prev">← {newer.data.shortTitle}</a> : <span />}
+      {older ? <a href={`/publication/${older.id}/`} rel="next">{older.data.shortTitle} →</a> : <span />}
+    </nav>
+  </article>
+</Base>
+
+<script>
+  const btn = document.getElementById('copy-bib') as HTMLButtonElement | null;
+  const pre = document.getElementById('bibtex');
+  if (btn && pre) {
+    const text = () => pre.textContent ?? '';
+    const flash = (msg: string) => {
+      btn.textContent = msg;
+      setTimeout(() => (btn.textContent = btn.dataset['label'] ?? 'Copy BibTeX'), 1800);
+    };
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(text());
+        flash('Copied');
+      } catch {
+        // Clipboard blocked (insecure context, permissions): select the text so Ctrl+C works.
+        const sel = getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(pre);
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+        flash('Press Ctrl+C');
+      }
+    });
+  }
+</script>
+
+<style>
+  /* <article> is a direct child of <main class="page">, so let it share the page grid. */
+  .paper { display: contents; }
+  .paper > * { grid-column: main; }
+  .paper > .wide { grid-column: main-start / note-end; }
+
+  .paper__head { padding-top: clamp(2.5rem, 8vh, 6rem); }
+  .paper__title {
+    font-size: clamp(1.9rem, 3.5vw, 3.2rem);
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+    text-wrap: balance;
+  }
+  .paper__authors { margin-top: clamp(1.1rem, 2vw, 1.6rem); font-size: 1.1rem; }
+  .paper__venue { margin-top: 0.3rem; color: var(--toner-2); }
+  .paper__links { margin-top: 0.8rem; }
+
+  .record { display: grid; gap: 0.35rem; padding-top: 0.5rem; }
+  .record span { display: block; overflow-wrap: anywhere; }
+  .record i { color: var(--toner-3); margin-right: 0.3em; }
+
+  .paper__abstract { margin-top: clamp(2.5rem, 5vw, 4rem); }
+  .runin { font-size: 0.86em; color: var(--toner-2); }
+
+  .paper__figure { margin-top: clamp(2.5rem, 5vw, 4rem); }
+  .paper__figure img { width: 100%; height: auto; background: #fff; }
+  @media (min-width: 1001px) { .paper__figure figcaption { padding-top: 0.2rem; } }
+
+  .paper__cite { margin-top: clamp(3rem, 6vw, 5rem); }
+  .paper__citebar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 0.6rem; }
+  .paper__pre {
+    margin: 0; padding: 1rem 1.1rem; overflow-x: auto;
+    background: color-mix(in srgb, var(--toner) 5%, var(--paper));
+    font: 400 0.86rem / 1.5 var(--serif);
+    tab-size: 2;
+  }
+  .paper__pre code { font: inherit; white-space: pre; }
+
+  .paper__pager {
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+    display: flex; justify-content: space-between; gap: 1.5rem;
+    font-style: italic;
+  }
+  .paper__pager a:last-child { text-align: right; }
+  @media (max-width: 600px) { .paper__pager { flex-direction: column; } .paper__pager a:last-child { text-align: left; } }
+
+  @media print {
+    .paper__pre { white-space: pre-wrap; }
+    .paper__pre code { white-space: pre-wrap; }
+  }
+</style>

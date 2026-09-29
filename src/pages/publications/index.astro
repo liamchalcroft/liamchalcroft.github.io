@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { authorsHtml, site, year } from '../../lib/site';
+
+const pubs = (await getCollection('publications')).sort((a, b) => +b.data.date - +a.data.date);
+const groups = [
+  { kind: 'journal', title: 'Journal papers' },
+  { kind: 'conference', title: 'Conference papers' },
+  { kind: 'workshop', title: 'Workshop papers' },
+  { kind: 'thesis', title: 'Thesis' },
+] as const;
+const sections = groups
+  .map((g) => ({ ...g, items: pubs.filter((p) => p.data.kind === g.kind) }))
+  .filter((g) => g.items.length > 0);
+---
+
+<Base
+  title="Publications"
+  description="Journal, conference and workshop papers, and the PhD thesis, by Liam Chalcroft: domain generalisation, synthetic data and self-supervised pre-training for medical imaging."
+>
+  <header class="intro wide with-note">
+    <div>
+      <h1 class="display" data-denoise="load" data-key="publications">Publications</h1>
+      <p class="lede intro__text">
+        Papers are listed by type, newest first. They are also on{' '}
+        <a href={site.links.scholar} rel="me">Google Scholar</a> and <a href={site.links.orcid} rel="me">ORCID</a>. An{' '}
+        <a href="/publications/feed.xml">RSS feed</a> is available.
+      </p>
+    </div>
+    <p class="note intro__note">
+      Cited {site.citations.count} times on Google Scholar as of {site.citations.asOf}.
+    </p>
+  </header>
+
+  {sections.map((s) => (
+    <section class="section wide" aria-labelledby={s.kind}>
+      <h2 class="h2" id={s.kind} data-denoise="scroll" data-denoise-hover>{s.title}</h2>
+      <ol class="work">
+        {s.items.map((p) => {
+          const d = p.data;
+          return (
+            <li class="work__item with-note">
+              <div>
+                <h3 class="h3"><a href={`/publication/${p.id}/`} data-denoise="scroll" data-denoise-hover data-key={p.id}>{d.title}</a></h3>
+                <p class="work__meta small">
+                  <span set:html={authorsHtml(d.authors, d.etAl)} />.{' '}
+                  <cite>{d.venue}</cite>{d.badge && <>, {d.badge.toLowerCase()}</>}.
+                  {d.note && <> {d.note}</>}
+                </p>
+                <p class="work__links small">
+                  {d.links.paper && <a href={d.links.paper}>paper</a>}
+                  {d.links.arxiv && <a href={d.links.arxiv}>arXiv</a>}
+                  {d.links.code && <a href={d.links.code}>code</a>}
+                  {d.links.extra.map((l) => <a href={l.url}>{l.label}</a>)}
+                </p>
+              </div>
+              <p class="note year">{year(d.date)}</p>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  ))}
+</Base>
+
+<style>
+  .intro { padding-top: clamp(2.5rem, 8vh, 6rem); align-items: end; }
+  .intro__text { margin-top: clamp(1.2rem, 2.5vw, 2rem); max-width: 30em; }
+  .intro__note { padding-bottom: 0.4rem; }
+  .work .year { font-size: 1.32rem; line-height: 1.22; color: var(--toner-3); }
+</style>

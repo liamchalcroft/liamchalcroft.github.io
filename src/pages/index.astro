@@ -1,0 +1,150 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { site, authorsHtml, year } from '../lib/site';
+import { libraries } from '../data/software';
+import { talks } from '../data/talks';
+import { milestones } from '../data/log';
+
+const pubs = (await getCollection('publications')).sort((a, b) => +b.data.date - +a.data.date);
+const selected = pubs.filter((p) => p.data.selected);
+
+const fmt = (iso: string) => {
+  const [y, m] = iso.split('-');
+  return m ? `${new Date(Date.UTC(+y!, +m - 1)).toLocaleString('en-GB', { month: 'long', timeZone: 'UTC' })} ${y}` : y!;
+};
+const log = [
+  ...milestones.map((m) => ({ date: m.date, text: m.text, href: m.href })),
+  ...talks.map((t) => ({ date: t.date.slice(0, 7), text: `${t.kind === 'oral' ? 'Oral' : 'Talk'} at ${t.event}`, href: t.url })),
+  ...pubs.filter((p) => p.data.kind !== 'thesis').map((p) => ({
+    date: p.data.date.toISOString().slice(0, 7),
+    text: `${p.data.shortTitle}, ${p.data.venueShort}`,
+    href: `/publication/${p.id}/`,
+  })),
+].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 7);
+---
+
+<Base>
+  <section class="hero wide with-note" aria-labelledby="name">
+    <div>
+      <h1 class="display" id="name" data-denoise="load" data-key="name">Liam Chalcroft</h1>
+      <div class="lede hero__intro">
+        <p>
+          I'm a machine learning researcher working on medical and spectral imaging. I'm currently the founding computer vision
+          scientist at <a href="https://www.prospectral.tech">Prospectral</a>, where I lead the machine learning work.
+        </p>
+        <p>
+          Before that I did a PhD at University College London on stroke lesion segmentation in clinical MRI, mainly on making
+          segmentation models robust to differences between scanners and sequences.
+        </p>
+      </div>
+    </div>
+    <p class="note hero__note">
+      London<br />
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+  </section>
+
+  <section class="section with-note" aria-labelledby="research">
+    <div>
+      <h2 class="h2" id="research" data-denoise="scroll" data-denoise-hover>Research</h2>
+      <div class="prose">
+        <p>
+          My PhD looked at lesion segmentation in routine clinical scans, which vary much more in contrast, resolution and
+          artefacts than research datasets. Most of that work used synthetic training data: images generated from tissue label
+          maps, either with randomised intensities or with a physical model of the MRI signal, so that a model does not depend on
+          any particular sequence. I also worked on self-supervised pre-training for 3D MRI and on architectures for 3D
+          segmentation.
+        </p>
+        <p>
+          At Prospectral I work on machine learning for spectral imaging, including physics-guided diffusion models for photonic
+          inverse design. I have also been looking at how the choice of tokenizer affects generative models of medical images.
+        </p>
+      </div>
+    </div>
+    <p class="note">
+      PhD supervised by <a href="https://scholar.google.com/citations?user=UWi2lukAAAAJ&hl=en">John Ashburner</a> and{' '}
+      <a href="https://scholar.google.com/citations?user=gyfMndoAAAAJ&hl=en">Cathy Price</a> at the Wellcome Centre for Human
+      Neuroimaging, as part of the EPSRC and Wellcome i4health CDT.<br /><br />
+      {site.citations.count} citations on <a href={site.links.scholar}>Google Scholar</a> ({site.citations.asOf}).
+    </p>
+  </section>
+
+  <section class="section wide" aria-labelledby="papers">
+    <h2 class="h2" id="papers" data-denoise="scroll" data-denoise-hover>Selected papers</h2>
+    <ol class="work">
+      {selected.map((p) => (
+        <li class="work__item with-note">
+          <div>
+            <h3 class="h3"><a href={`/publication/${p.id}/`} data-denoise="scroll" data-denoise-hover data-key={p.id}>{p.data.title}</a></h3>
+            <p class="work__meta small">
+              <span set:html={authorsHtml(p.data.authors, p.data.etAl)} />.{' '}
+              <cite>{p.data.venueShort}</cite>{p.data.badge && <>, {p.data.badge.toLowerCase()}</>}.
+            </p>
+            <p class="work__links small">
+              {p.data.links.paper && <a href={p.data.links.paper}>paper</a>}
+              {p.data.links.arxiv && <a href={p.data.links.arxiv}>arXiv</a>}
+              {p.data.links.code && <a href={p.data.links.code}>code</a>}
+            </p>
+          </div>
+          <p class="note year">{year(p.data.date)}</p>
+        </li>
+      ))}
+    </ol>
+    <p class="more"><a href="/publications/">All publications</a></p>
+  </section>
+
+  <section class="section wide" aria-labelledby="code">
+    <h2 class="h2" id="code" data-denoise="scroll" data-denoise-hover>Software</h2>
+    <ul class="work">
+      {libraries.map((l) => (
+        <li class="work__item with-note">
+          <div>
+            <h3 class="h3"><a href={l.url} data-denoise="scroll" data-key={l.name}>{l.name}</a></h3>
+            <p class="work__meta small" set:html={l.html} />
+          </div>
+          <p class="note tag">{l.tags.join(', ')}</p>
+        </li>
+      ))}
+    </ul>
+    <p class="more"><a href="/software/">All software</a></p>
+  </section>
+
+  <section class="section wide" aria-labelledby="recent">
+    <h2 class="h2" id="recent" data-denoise="scroll" data-denoise-hover>Recent</h2>
+    <ul class="recent">
+      {log.map((e) => (
+        <li class="with-note">
+          <p>{e.href ? <a href={e.href}>{e.text}</a> : e.text}</p>
+          <p class="note">{fmt(e.date)}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section wide" aria-labelledby="contact">
+    <h2 class="h2" id="contact" data-denoise="scroll" data-denoise-hover>Contact</h2>
+    <p class="lede"><a href={`mailto:${site.email}`}>{site.email}</a></p>
+    <p class="small muted no-print" style="margin-top:1.5rem">
+      Headings on this site are drawn from noise with a seeded schedule, using the degraded cuts of the typeface (this visit: seed <span data-seed-readout>—</span>).{' '}
+      <button class="button" type="button" id="resample">Resample</button>
+    </p>
+  </section>
+</Base>
+
+<script>
+  import { resampleAll } from '../scripts/denoise';
+  document.getElementById('resample')?.addEventListener('click', resampleAll);
+</script>
+
+<style>
+  .hero { padding-top: clamp(3rem, 12vh, 9rem); align-items: end; }
+  .hero__intro { margin-top: clamp(1.5rem, 3vw, 2.5rem); max-width: 34rem; }
+  .hero__intro p + p { margin-top: 0.8em; }
+  .hero__note { padding-bottom: 0.5rem; }
+  .hero__who { color: var(--toner); }
+  .more { margin-top: 2rem; font-style: italic; }
+  .recent { display: grid; gap: 0.7rem; }
+  .recent .note { font-size: 0.86rem; }
+  .work .year { font-size: 1.32rem; }
+</style>

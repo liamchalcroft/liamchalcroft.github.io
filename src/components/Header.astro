@@ -1,0 +1,16 @@
+---
+import { site } from '../lib/site';
+const path = Astro.url.pathname;
+const current = (href: string) => path.startsWith(href) || (href === '/publications/' && path.startsWith('/publication/'));
+---
+
+<header class="top wide">
+  <a class="top__name" href="/">{site.name}</a>
+  <nav aria-label="Main">
+    <ul class="top__nav">
+      {site.nav.map((l) => (
+        <li><a href={l.href} aria-current={current(l.href) ? 'page' : undefined}>{l.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+</header>
