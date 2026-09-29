@@ -1,0 +1,30 @@
+---
+import { site } from '../lib/site';
+import { spectrumGradient } from '../lib/scan/spectrum';
+interface Props { series: string }
+const { series } = Astro.props;
+const path = Astro.url.pathname;
+const current = (href: string) => (href === '/' ? path === '/' : path.startsWith(href) || (href === '/publications/' && path.startsWith('/publication/')));
+---
+
+<header class="mast">
+  <div class="mast__row">
+    <a class="mast__name" href="/"><span class="mast__surname">Chalcroft</span>, Liam<span class="mast__title"> · Dr</span></a>
+    <dl class="mast__readout" aria-label="This visit's synthetic subject">
+      <div><dt>Subj</dt><dd data-readout="subject">········</dd></div>
+      <div><dt>Seq</dt><dd data-readout="protocol">···</dd></div>
+      <div><dt class="lc">λ</dt><dd class="lc" data-readout="lambda">··· nm</dd></div>
+    </dl>
+    <nav class="mast__nav" aria-label="Main">
+      <ul>
+        {site.nav.map((l) => (
+          <li><a href={l.href} aria-current={current(l.href) ? 'page' : undefined}><span class="mast__code">{l.code}</span>{l.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+  <div class="spectrum" style={`--spectrum: ${spectrumGradient(400, 700, 30)}`} aria-hidden="true">
+    <span class="spectrum__mark"></span>
+  </div>
+</header>
+<span hidden data-series={series}></span>

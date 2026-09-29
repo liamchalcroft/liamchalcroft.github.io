@@ -1,0 +1,149 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { site, year } from '../lib/site';
+import { experience, education, teaching, skills } from '../data/cv';
+import { talks } from '../data/talks';
+import type { CvEntry } from '../data/types';
+
+const pubs = (await getCollection('publications')).sort((a, b) => +b.data.date - +a.data.date);
+const month = (iso: string) =>
+  new Date(iso + 'T00:00:00Z').toLocaleDateString('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const talkKind = { oral: 'Oral', invited: 'Invited talk', poster: 'Poster', seminar: 'Seminar' } as const;
+
+const blocks: { code: string; title: string; id: string; rows: CvEntry[] }[] = [
+  { code: '01', title: 'Experience', id: 'experience', rows: experience },
+  { code: '02', title: 'Education', id: 'education', rows: education },
+  { code: '03', title: 'Teaching and supervision', id: 'teaching', rows: teaching },
+];
+---
+
+<Base
+  title="Curriculum vitae"
+  series="03"
+  description="Curriculum vitae of Dr Liam Chalcroft: Founding Computer Vision Scientist at Prospectral, PhD in machine learning for medical imaging from University College London."
+>
+  <PageHead code="03" label="Curriculum vitae" title="Curriculum vitae">
+    <p>
+      Machine learning researcher working on medical and spectral imaging: domain generalisation, physics-constrained synthetic data, and self-supervised pre-training for 3D imaging. Currently Founding Computer Vision Scientist at Prospectral.
+    </p>
+    <Fragment slot="aside">
+      <button class="btn no-print" type="button" id="print">Print / save as PDF</button>
+      <dl class="readout">
+        <dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+        <dt>Scholar</dt><dd><a href={site.links.scholar} rel="me">Google Scholar</a></dd>
+        <dt>ORCID</dt><dd><a href={site.links.orcid} rel="me">0000-0003-3363-6454</a></dd>
+        <dt>GitHub</dt><dd><a href={site.links.github} rel="me">liamchalcroft</a></dd>
+      </dl>
+    </Fragment>
+  </PageHead>
+
+  {blocks.map((b) => (
+    <>
+      <SectionHead code={b.code} title={b.title} id={b.id} />
+      <section class="cv sheet" aria-labelledby={b.id}>
+        {b.rows.map((r) => (
+          <>
+            <div class="cv__when cell mono">{r.when}</div>
+            <article class="cv__body cell raster">
+              <h3 class="entry__title">{r.role}</h3>
+              <p class="cv__org">
+                {r.orgUrl ? <a href={r.orgUrl}>{r.org}</a> : r.org}
+                {r.place && <span class="faint"> · {r.place}</span>}
+              </p>
+              {r.points && r.points.length > 0 && (
+                <ul class="cv__points">
+                  {r.points.map((pt) => <li set:html={pt} />)}
+                </ul>
+              )}
+            </article>
+          </>
+        ))}
+      </section>
+    </>
+  ))}
+
+  <SectionHead code="04" title="Talks" id="talks" aside="Confirmed talks only" />
+  <section class="cv sheet" aria-labelledby="talks">
+    {talks.map((t) => (
+      <>
+        <div class="cv__when cell mono">{month(t.date)}</div>
+        <article class="cv__body cell raster">
+          <h3 class="entry__title">{t.url ? <a href={t.url}>{t.title}</a> : t.title}</h3>
+          <p class="cv__org">{t.event}{t.place && <span class="faint"> · {t.place}</span>} <span class="faint"> · {talkKind[t.kind]}</span></p>
+        </article>
+      </>
+    ))}
+  </section>
+
+  <SectionHead code="05" title="Publications" id="publications" aside={`${pubs.length} entries`} />
+  <section class="cv sheet" aria-labelledby="publications">
+    {pubs.map((p) => (
+      <>
+        <div class="cv__when cell mono">{year(p.data.date)}</div>
+        <article class="cv__body cv__pub cell">
+          <p class="cv__publine">
+            <a href={`/publication/${p.id}/`}>{p.data.title}</a>
+            <span class="faint"> · {p.data.venueShort}</span>
+          </p>
+        </article>
+      </>
+    ))}
+    <div class="cv__when cell mono no-print"></div>
+    <div class="cv__body cell no-print">
+      <a class="mono" href="/publications/">Full list with abstracts and BibTeX →</a>
+    </div>
+  </section>
+
+  <SectionHead code="06" title="Technical skills" id="skills" />
+  <section class="cv sheet" aria-labelledby="skills">
+    {Object.entries(skills).map(([group, items]) => (
+      <>
+        <div class="cv__when cell mono">{group}</div>
+        <div class="cv__body cell raster">
+          <ul class="tags">{items.map((s) => <li>{s}</li>)}</ul>
+        </div>
+      </>
+    ))}
+  </section>
+</Base>
+
+<script>
+  document.getElementById('print')?.addEventListener('click', () => window.print());
+</script>
+
+<style>
+  .cv__when { grid-column: span 2; color: var(--ink-3); padding-top: calc(var(--pad) + 0.3em); }
+  .cv__body { grid-column: span 10; }
+  .cv__org { margin-top: 4px; color: var(--ink-2); font-size: 0.95rem; }
+  .cv__points { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; max-width: 72ch; font-size: 0.95rem; color: var(--ink-2); }
+  .cv__points li { position: relative; padding-left: 20px; }
+  .cv__points li::before { content: ''; position: absolute; left: 0; top: 0.8em; width: 10px; height: 1px; background: var(--lambda); }
+  .cv__pub { padding-block: calc(var(--pad) * 0.7); }
+  .cv__when:has(+ .cv__pub) { padding-top: calc(var(--pad) * 0.7 + 0.15em); }
+  .cv__publine { font-size: 0.98rem; }
+
+  @media (max-width: 1080px) {
+    .cv__when { grid-column: span 3; }
+    .cv__body { grid-column: span 9; }
+  }
+  @media (max-width: 640px) {
+    .cv { grid-template-columns: 96px minmax(0, 1fr); }
+    .cv__when, .cv__body { grid-column: auto; }
+    .cv__when { padding-inline: 12px; font-size: 0.66rem; }
+    .cv__body { padding-inline: 14px; }
+  }
+
+  /* Print: keep the date column beside the content instead of stacking. */
+  @media print {
+    .cv.sheet { grid-template-columns: 88px minmax(0, 1fr); }
+    .cv.sheet > .cv__when, .cv.sheet > .cv__body { grid-column: auto !important; }
+    .cv.sheet > * { border-bottom: 0; break-inside: avoid; }
+    .cv__when { padding-inline: 0; }
+    .cv__points { color: #222; }
+    .cv__points li::before { background: #444; }
+    .tags li { border-color: #999; }
+  }
+</style>

@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import NoiseTile from '../components/NoiseTile.astro';
+---
+
+<Base title="No signal" series="404" description="This address returned no signal.">
+  <meta slot="head" name="robots" content="noindex" />
+
+  <section class="sheet nosig" aria-labelledby="page-title">
+    <NoiseTile
+      class="span-12"
+      label="Animated Rician noise: an MRI acquisition with no signal in it"
+      tl={['IM 0/0', 'SUBJ —']}
+      tr={['NO SIGNAL']}
+      bl={['SEQ —', 'TE — TR —']}
+      br={['PE 000/000']}
+    />
+    <div class="cell span-8 md-12 nosig__msg">
+      <p class="label raster">Se 404 · Not found</p>
+      <h1 class="nosig__title raster" id="page-title">No signal at this address.</h1>
+      <p class="prose muted raster">
+        The page you asked for is not here. What you see above is what a scanner records when nothing is in the field of view: noise, and nothing else. It may have moved, or the link may be mistyped.
+      </p>
+    </div>
+    <div class="cell span-4 md-12 nosig__aside">
+      <dl class="readout">
+        <dt>Requested</dt><dd><code id="path">—</code></dd>
+        <dt>Status</dt><dd>404</dd>
+      </dl>
+      <div class="nosig__actions">
+        <a class="btn" href="/">Back to index</a>
+        <a class="btn" href="/publications/">Papers</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const el = document.getElementById('path');
+  if (el) el.textContent = location.pathname + location.search;
+</script>
+
+<style>
+  .nosig { border-top: 0; }
+  .nosig__msg { padding-top: clamp(28px, 4vw, 56px); padding-bottom: clamp(28px, 4vw, 56px); }
+  .nosig__title {
+    margin: 14px 0 22px -0.04em;
+    font-size: clamp(2.6rem, 7vw, 6rem);
+    font-weight: 560;
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+    max-width: 14ch;
+  }
+  .nosig__aside { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
+  .nosig__aside code { overflow-wrap: anywhere; }
+  .nosig__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+</style>

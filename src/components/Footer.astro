@@ -1,0 +1,23 @@
+---
+import { site } from '../lib/site';
+const y = new Date().getFullYear();
+---
+
+<footer class="foot">
+  <div class="foot__grid">
+    <p class="foot__end mono">End of series</p>
+    <ul class="foot__links">
+      <li><a href={`mailto:${site.email}`}>Email</a></li>
+      <li><a href={site.links.scholar} rel="me">Scholar</a></li>
+      <li><a href={site.links.github} rel="me">GitHub</a></li>
+      <li><a href={site.links.orcid} rel="me">ORCID</a></li>
+      <li><a href={site.links.linkedin} rel="me">LinkedIn</a></li>
+    </ul>
+    <p class="foot__colophon">
+      Every scan on this site is synthesised in your browser from a random seed. No patient, and no scanner, was involved.
+      Set in Hanken Grotesk and DM Mono. Built with Astro.{' '}
+      <a href="https://github.com/liamchalcroft/liamchalcroft.github.io">Source</a>.
+    </p>
+    <p class="foot__meta mono">© {y} {site.name} · London · Subj <span data-readout="subject"></span></p>
+  </div>
+</footer>

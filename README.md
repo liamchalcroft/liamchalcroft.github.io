@@ -1,52 +1,31 @@
 # liamchalcroft.github.io
 
-Personal academic site for Liam Chalcroft, built with Jekyll and deployed by GitHub Pages.
+Personal site of Dr Liam Chalcroft. Astro + TypeScript, deployed to GitHub Pages by GitHub Actions.
 
-Originally forked from [academicpages](https://github.com/academicpages/academicpages.github.io), which derives from the [Minimal Mistakes](https://mmistakes.github.io/minimal-mistakes/) theme (© 2016 Michael Rose, MIT). The theme layer has since been replaced; see `LICENSE`.
+Every scan on the site is synthesised in the visitor's browser. Each visit gets a random 32-bit subject seed, and that seed fixes:
 
-## Structure
+1. **Anatomy.** A procedural brain phantom built as tissue labels with partial-volume fractions: cortex with radial sulci, white matter, deep grey matter, ventricles, and usually a stroke lesion (`src/lib/scan/phantom.ts`).
+2. **Contrast.** Per-tissue proton density and T1/T2/T2\* go through the signal equation for a sampled protocol (SPGR, FSE, FLAIR), or through random per-tissue intensities in SynthSeg style (`src/lib/scan/physics.ts`).
+3. **Acquisition.** The image is Fourier transformed and re-acquired one phase-encode line at a time, with an O(N²)-per-line incremental reconstruction (`src/lib/scan/acquire.ts`).
+4. **Colour.** The only colour on the site is one wavelength between 450 and 650 nm, converted with the CIE 1931 colour-matching functions (`src/lib/scan/spectrum.ts`).
 
-| Path | Contents |
-| --- | --- |
-| `_pages/` | Home, publications, software, CV, sitemap, 404 |
-| `_publications/` | One file per paper. Front matter drives the listing and detail pages |
-| `_data/navigation.yml` | Top navigation |
-| `_layouts/`, `_includes/` | Page shell |
-| `_sass/` | `_tokens` (design tokens), `_base`, `_layout`, `_components`, `_syntax`, `_print` |
-| `assets/css/main.scss` | Stylesheet entry point |
+Append `?subject=84cb3841&protocol=FLAIR` to any URL to reproduce a subject. The paper thumbnails are seeded by their slug, so they're the same for everyone.
 
-## Running locally
-
-GitHub Pages pins Jekyll 3.x, which needs Ruby 3.3 or older. Ruby 3.4 removed `csv` and `base64` from the standard library and Ruby 3.2 removed `Object#tainted?`, which the pinned Liquid version calls.
+## Working on it
 
 ```sh
-brew install ruby@3.3
-export PATH="/opt/homebrew/opt/ruby@3.3/bin:$PATH"
-bundle install
-bundle exec jekyll serve
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # type-checks, then builds to dist/
 ```
 
-The site is then at <http://127.0.0.1:4000>.
+- **Add a paper:** create `src/content/publications/<slug>.md` (the schema is in `src/content.config.ts`; the filename is the URL). The home page, publications page, detail page, BibTeX, Scholar meta tags, feed and sitemap all update from that file. Set `selected: true` to put it on the home page.
+- **Add a talk:** edit `src/data/talks.ts`.
+- **CV, software, milestones:** `src/data/cv.ts`, `src/data/software.ts`, `src/data/log.ts`.
 
-## Adding a publication
+## Deploying
 
-Create `_publications/<year>-<slug>.md`:
+`.github/workflows/deploy.yml` builds on every push and PR, and deploys pushes to `master`.
+**One-time setup:** in the repository's *Settings → Pages*, set *Source* to **GitHub Actions**. Until then GitHub keeps trying to build the repo with Jekyll.
 
-```yaml
----
-title: "Paper title"
-collection: publications
-permalink: /publication/<year>-<slug>
-date: 2026-01-01
-authors: 'A. Author, L. Chalcroft'
-venue: 'Venue name'
-paperurl: 'https://...'
-arxiv: 'https://arxiv.org/abs/...'
-code: 'https://github.com/...'
-citation: 'Full citation.'
----
-
-Abstract text.
-```
-
-Then add a matching `<li class="entry">` block to `_pages/publications.md`, and to `_pages/about.md` if it belongs in the selected list.
+See [docs/custom-domain.md](docs/custom-domain.md) for moving to a custom domain.

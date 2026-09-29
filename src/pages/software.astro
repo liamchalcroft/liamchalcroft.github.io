@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { site } from '../lib/site';
+import { libraries, paperCode, upstream } from '../data/software';
+import type { Project } from '../data/types';
+
+const pubs = await getCollection('publications');
+const byId = new Map(pubs.map((p) => [p.id, p]));
+
+const sections: { code: string; title: string; id: string; aside: string; items: Project[] }[] = [
+  { code: '01', title: 'Libraries', id: 'libraries', aside: 'Tools I maintain', items: libraries },
+  { code: '02', title: 'Models and paper code', id: 'paper-code', aside: 'Code that goes with a paper', items: paperCode },
+  { code: '03', title: 'Upstream contributions', id: 'upstream', aside: 'Fixes sent to other projects', items: upstream },
+];
+---
+
+<Base
+  title="Software"
+  series="02"
+  description="Open-source libraries, paper code and upstream contributions by Liam Chalcroft: medical imaging in Rust and Python, synthetic MRI, and agentic medical VLMs."
+>
+  <PageHead code="02" label="Code" title="Software">
+    <p>
+      Libraries I maintain, the code behind each paper, and fixes I have sent upstream. Everything is permissively licensed and on{' '}
+      <a href={site.links.github} rel="me">GitHub</a>.
+    </p>
+  </PageHead>
+
+  {sections.map((s) => (
+    <>
+      <SectionHead code={s.code} title={s.title} id={s.id} aside={s.aside} />
+      <section class="sheet" aria-labelledby={s.id}>
+        {s.items.map((p) => {
+          const paper = p.paper ? byId.get(p.paper) : undefined;
+          return (
+            <article class="cell span-6 md-12 project raster">
+              <div class="entry__meta">
+                <span class="label">{p.tags.length ? p.tags.join(' · ') : 'Contribution'}</span>
+              </div>
+              <h3 class="entry__title"><a href={p.url}>{p.name}</a></h3>
+              <p class="project__text muted" set:html={p.html} />
+              {paper && (
+                <p class="entry__links">
+                  <a href={`/publication/${paper.id}/`}>Paper: {paper.data.shortTitle} →</a>
+                </p>
+              )}
+            </article>
+          );
+        })}
+        {s.items.length % 2 === 1 && <div class="filler span-6 md-12" aria-hidden="true"></div>}
+      </section>
+    </>
+  ))}
+</Base>
+
+<style>
+  .project { display: flex; flex-direction: column; min-height: 168px; }
+  .project__text { margin-top: 8px; max-width: 58ch; }
+  .project :global(.entry__links) { margin-top: auto; padding-top: 16px; }
+  @media (max-width: 1080px) { .filler { display: none; } }
+  @media print { .filler { display: none; } }
+</style>
