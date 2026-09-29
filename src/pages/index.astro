@@ -1,10 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import ScanTile from '../components/ScanTile.astro';
-import SectionHead from '../components/SectionHead.astro';
-import PaperCard from '../components/PaperCard.astro';
-import { site } from '../lib/site';
+import SynthFigure from '../components/SynthFigure.astro';
+import { site, authorsHtml, year } from '../lib/site';
 import { libraries } from '../data/software';
 import { talks } from '../data/talks';
 import { milestones } from '../data/log';
@@ -12,400 +10,144 @@ import { milestones } from '../data/log';
 const pubs = (await getCollection('publications')).sort((a, b) => +b.data.date - +a.data.date);
 const selected = pubs.filter((p) => p.data.selected);
 
-// The film strip: twelve axial slices, inferior to superior.
-const slices = Array.from({ length: 12 }, (_, i) => -0.14 + i * 0.056);
-const mm = (z: number) => `${z >= 0 ? '+' : '−'}${Math.abs(Math.round(z * 108))} mm`;
-
+const fmt = (iso: string) => {
+  const [y, m] = iso.split('-');
+  return m ? `${new Date(Date.UTC(+y!, +m - 1)).toLocaleString('en-GB', { month: 'long', timeZone: 'UTC' })} ${y}` : y!;
+};
 const log = [
-  ...milestones.map((m) => ({ ...m, kind: 'Milestone' })),
-  ...talks.map((t) => ({ date: t.date.slice(0, 7), text: `${t.kind === 'oral' ? 'Oral' : 'Talk'}, ${t.event}`, href: t.url, kind: 'Talk' })),
+  ...milestones.map((m) => ({ date: m.date, text: m.text, href: m.href })),
+  ...talks.map((t) => ({ date: t.date.slice(0, 7), text: `${t.kind === 'oral' ? 'Oral' : 'Talk'} at ${t.event}`, href: t.url })),
   ...pubs.filter((p) => p.data.kind !== 'thesis').map((p) => ({
     date: p.data.date.toISOString().slice(0, 7),
     text: `${p.data.shortTitle}, ${p.data.venueShort}`,
     href: `/publication/${p.id}/`,
-    kind: 'Paper',
   })),
-].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 9);
+].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 7);
 ---
 
-<Base series="00">
-  <section class="hero sheet" aria-labelledby="name">
-    <div class="hero__title cell">
-      <p class="label raster">Se 00 · Index · Chalcroft^Liam</p>
-      <h1 class="display" id="name"><span class="hero__dr mono">Dr</span>Liam<br />Chalcroft</h1>
-    </div>
-
-    <div class="hero__lede cell">
-      <p class="lede raster">I train imaging models on scans that were never acquired, so they hold up on the ones that are.</p>
-    </div>
-
-    <div class="hero__facts cell">
-      <dl class="readout raster">
-        <dt>Now</dt><dd>Founding Computer Vision Scientist, <a href="https://www.prospectral.tech">Prospectral</a></dd>
-        <dt>PhD</dt><dd>Machine learning, University College London</dd>
-        <dt>Based</dt><dd>London, UK</dd>
-        <dt>Contact</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
-      </dl>
-    </div>
-
-    <ScanTile
-      class="hero__scan"
-      id="hero-scan"
-      n={512}
-      order="linear"
-      duration={2600}
-      kspace="hero-k"
-      manual
-      label="A synthetic axial brain MRI slice, generated in your browser for this visit"
-      tl={['Chalcroft^Liam', 'ID —']}
-      tr={['UCL · WCHN', 'Prospectral']}
-      bl={['—', 'SL —']}
-      br={['W 1.00 L 0.50', 'IM —']}
-    >
-      <span class="hero__scan-tl-id" hidden></span>
-    </ScanTile>
-
-    <div class="hero__k cell">
-      <div class="kbox">
-        <canvas id="hero-k" width="512" height="512" aria-hidden="true"></canvas>
-        <p class="label kbox__cap"><span>k-space</span><span id="hero-pe">PE 000/512</span></p>
+<Base>
+  <section class="hero wide with-note" aria-labelledby="name">
+    <div>
+      <h1 class="display" id="name" data-denoise="load" data-key="name">Liam Chalcroft</h1>
+      <div class="lede hero__intro">
+        <p>
+          I'm a machine learning researcher working on medical and spectral imaging. I'm currently the founding computer vision
+          scientist at <a href="https://www.prospectral.tech">Prospectral</a>, where I lead the machine learning work.
+        </p>
+        <p>
+          Before that I did a PhD at University College London on stroke lesion segmentation in clinical MRI, mainly on making
+          segmentation models robust to differences between scanners and sequences.
+        </p>
       </div>
     </div>
-    <div class="hero__cap cell">
-      <p class="label">What you're looking at</p>
-      <p class="hero__caption">
-        This brain was synthesised for you, subject <span data-readout="subject"></span>. It doesn't exist. The image was rebuilt line by line from its Fourier transform, the way a scanner fills k-space. <span class="fine-only">Drag the scan to window it; arrow keys change slice.</span> <a href="#method">How it works</a>
-      </p>
-    </div>
-    <div class="hero__ctl cell no-print" aria-label="Scanner controls" role="group">
-      <div class="console__group">
-        <p class="label" id="proto-label">Protocol</p>
-        <div class="seg" role="group" aria-labelledby="proto-label" id="protocols">
-          {['T1w', 'PDw', 'T2*w', 'T2w', 'FLAIR', 'Synthetic'].map((p) => (
-            <button class="btn" type="button" data-protocol={p} aria-pressed="false">{p}</button>
-          ))}
-        </div>
-      </div>
-      <div class="console__group">
-        <p class="label">Subject</p>
-        <div class="console__row">
-          <button class="btn" type="button" id="resample">New subject <kbd>R</kbd></button>
-          <button class="btn" type="button" id="overlay" aria-pressed="false">Lesion label</button>
-          <button class="btn" type="button" id="share">Copy link</button>
-        </div>
-      </div>
-    </div>
+    <p class="note hero__note">
+      London<br />
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
   </section>
 
-  <section class="strip sheet no-print" aria-label="Twelve slices through this subject">
-    {slices.map((z, i) => (
-      <button class="strip__cell" type="button" data-z={z} aria-label={`Show slice ${i + 1}, ${mm(z)}`}>
-        <ScanTile
-          n={128}
-          z={z}
-          duration={900}
-          manual
-          label={`Slice ${i + 1}`}
-          tl={[`IM ${String(i + 1).padStart(2, '0')}`]}
-          br={[mm(z)]}
-        />
-      </button>
-    ))}
-  </section>
-
-  <SectionHead code="01" title="How this image was made" id="method" aside="Labels → physics → k-space" />
-  <section class="method sheet" aria-labelledby="method">
-    <div class="cell span-3 md-6 sm-12 raster">
-      <p class="label">01 Labels</p>
-      <p>A brain is generated from your seed as tissue labels: cortex, white matter, deep grey matter, ventricles, and usually a stroke lesion in one hemisphere.</p>
-    </div>
-    <div class="cell span-3 md-6 sm-12 raster">
-      <p class="label">02 Physics</p>
-      <p>Each tissue gets a proton density and T1, T2 and T2* relaxation times. The protocol's signal equation turns them into contrast.</p>
-      <p class="eq mono" data-eq>S = PD · sin α · (1 − E₁) / (1 − cos α · E₁) · e<sup>−TE/T2*</sup></p>
-    </div>
-    <div class="cell span-3 md-6 sm-12 raster">
-      <p class="label">03 K-space</p>
-      <p>The image is Fourier transformed, then acquired again one phase-encode line at a time. Early on you see what a partly filled k-space looks like: edges and ringing before the image appears.</p>
-    </div>
-    <div class="cell span-3 md-6 sm-12 raster">
-      <p class="label">04 Why</p>
-      <p>
-        This is the idea behind my PhD. If the labels come first, any contrast can be synthesised, so a segmentation model never gets to overfit to one scanner.
-        See <a href="/publication/2024-synthetic-data-stroke-segmentation/">SynthStroke</a> and <a href="/publication/2025-domain-agnostic-stroke-lesion-segmentation/">qSynth</a>.
-      </p>
-    </div>
-  </section>
-
-  <SectionHead code="02" title="Research" id="research" aside="Domain generalisation · synthetic data · spectral imaging" />
-  <section class="sheet" aria-labelledby="research">
-    <div class="cell span-7 md-12 raster">
+  <section class="section with-note" aria-labelledby="research">
+    <div>
+      <h2 class="h2" id="research" data-denoise="scroll" data-denoise-hover>Research</h2>
       <div class="prose">
-      <p>
-        My PhD at the Wellcome Centre for Human Neuroimaging, supervised by <a href="https://scholar.google.com/citations?user=UWi2lukAAAAJ&hl=en">John Ashburner</a> and <a href="https://scholar.google.com/citations?user=gyfMndoAAAAJ&hl=en">Cathy Price</a>, asked how a stroke lesion
-        segmentation model can work on scans it has never seen: a different scanner, a different sequence, a resolution
-        nobody would choose for research. The answer that held up was to stop training on real images. Models trained on data
-        generated from tissue labels under MRI physics constraints transfer to out-of-domain clinical scans without
-        sequence-specific retraining.
-      </p>
-      <p>
-        At Prospectral I lead machine learning and its integration into the product, taking the same question to spectral
-        imaging, where the physics is better specified and labelled data is scarcer still. Recent work there includes
-        physics-guided diffusion for photonic inverse design.
-      </p>
+        <p>
+          My PhD looked at lesion segmentation in routine clinical scans, which vary much more in contrast, resolution and
+          artefacts than research datasets. Most of that work used synthetic training data: images generated from tissue label
+          maps, either with randomised intensities or with a physical model of the MRI signal, so that a model does not depend on
+          any particular sequence. I also worked on self-supervised pre-training for 3D MRI and on architectures for 3D
+          segmentation.
+        </p>
+        <p>
+          At Prospectral I work on machine learning for spectral imaging, including physics-guided diffusion models for photonic
+          inverse design. I have also been looking at how the choice of tokenizer affects generative models of medical images.
+        </p>
       </div>
     </div>
-    <div class="cell span-5 md-12">
-      <p class="label">Topics</p>
-      <ul class="tags" style="margin-top:10px">
-        {['Domain generalisation', 'Synthetic data', 'Self-supervised learning', 'Generative modelling', 'Physics-informed ML', 'Spectral imaging', '3D segmentation', 'Medical VLM agents'].map((t) => <li>{t}</li>)}
-      </ul>
-    </div>
+    <p class="note">
+      PhD supervised by <a href="https://scholar.google.com/citations?user=UWi2lukAAAAJ&hl=en">John Ashburner</a> and{' '}
+      <a href="https://scholar.google.com/citations?user=gyfMndoAAAAJ&hl=en">Cathy Price</a> at the Wellcome Centre for Human
+      Neuroimaging, as part of the EPSRC and Wellcome i4health CDT.<br /><br />
+      {site.citations.count} citations on <a href={site.links.scholar}>Google Scholar</a> ({site.citations.asOf}).
+    </p>
   </section>
 
-  <SectionHead code="03" title="Selected work" id="work" aside={`${selected.length} of ${pubs.length} · hover to re-acquire`} />
-  <section class="work sheet" aria-labelledby="work">
-    {selected.map((p, i) => <PaperCard entry={p} index={i + 1} class="span-4 md-6 sm-12" />)}
-    <a class="work__more cell span-4 md-6 sm-12" href="/publications/">
-      <span class="label">Se 01</span>
-      <span class="work__more-t">All publications →</span>
-      <span class="faint">Journal, conference and workshop papers, and the thesis.</span>
-    </a>
-  </section>
+  <SynthFigure />
 
-  <SectionHead code="04" title="Code" id="code" aside="Everything permissively licensed" />
-  <section class="sheet" aria-labelledby="code">
-    {libraries.map((l) => (
-      <article class="cell span-6 md-12 raster">
-        <div class="entry__meta"><span class="label">{l.tags.join(' · ')}</span></div>
-        <h3 class="entry__title"><a href={l.url}>{l.name}</a></h3>
-        <p class="muted" style="margin-top:8px" set:html={l.html} />
-      </article>
-    ))}
-    <a class="cell span-12 work__more work__more--row" href="/software/"><span class="label">Se 02</span><span>All software, paper code and upstream contributions →</span></a>
-  </section>
-
-  <SectionHead code="05" title="Log" id="log" aside="Most recent first" />
-  <section class="sheet" aria-labelledby="log">
-    <ol class="log cell span-12">
-      {log.map((e) => (
-        <li class="raster">
-          <span class="mono log__date">{e.date}</span>
-          <span class="mono log__kind">{e.kind}</span>
-          <span>{e.href ? <a href={e.href}>{e.text}</a> : e.text}</span>
+  <section class="section wide" aria-labelledby="papers">
+    <h2 class="h2" id="papers" data-denoise="scroll" data-denoise-hover>Selected papers</h2>
+    <ol class="work">
+      {selected.map((p) => (
+        <li class="work__item with-note">
+          <div>
+            <h3 class="h3"><a href={`/publication/${p.id}/`} data-denoise="scroll" data-denoise-hover data-key={p.id}>{p.data.title}</a></h3>
+            <p class="work__meta small">
+              <span set:html={authorsHtml(p.data.authors, p.data.etAl)} />.{' '}
+              <cite>{p.data.venueShort}</cite>{p.data.badge && <>, {p.data.badge.toLowerCase()}</>}.
+            </p>
+            <p class="work__links small">
+              {p.data.links.paper && <a href={p.data.links.paper}>paper</a>}
+              {p.data.links.arxiv && <a href={p.data.links.arxiv}>arXiv</a>}
+              {p.data.links.code && <a href={p.data.links.code}>code</a>}
+            </p>
+          </div>
+          <p class="note year">{year(p.data.date)}</p>
         </li>
       ))}
     </ol>
+    <p class="more"><a href="/publications/">All publications</a></p>
   </section>
 
-  <SectionHead code="06" title="Contact" id="contact" />
-  <section class="sheet" aria-labelledby="contact">
-    <div class="cell span-12 contact">
-      <a class="contact__mail" href={`mailto:${site.email}`}>{site.email}</a>
-      <ul class="entry__links">
-        <li><a href={site.links.scholar} rel="me">Google Scholar</a></li>
-        <li><a href={site.links.github} rel="me">GitHub</a></li>
-        <li><a href={site.links.orcid} rel="me">ORCID</a></li>
-        <li><a href={site.links.linkedin} rel="me">LinkedIn</a></li>
-        <li><a href="/cv/">CV</a></li>
-      </ul>
-    </div>
+  <section class="section wide" aria-labelledby="code">
+    <h2 class="h2" id="code" data-denoise="scroll" data-denoise-hover>Software</h2>
+    <ul class="work">
+      {libraries.map((l) => (
+        <li class="work__item with-note">
+          <div>
+            <h3 class="h3"><a href={l.url} data-denoise="scroll" data-key={l.name}>{l.name}</a></h3>
+            <p class="work__meta small" set:html={l.html} />
+          </div>
+          <p class="note tag">{l.tags.join(', ')}</p>
+        </li>
+      ))}
+    </ul>
+    <p class="more"><a href="/software/">All software</a></p>
+  </section>
+
+  <section class="section wide" aria-labelledby="recent">
+    <h2 class="h2" id="recent" data-denoise="scroll" data-denoise-hover>Recent</h2>
+    <ul class="recent">
+      {log.map((e) => (
+        <li class="with-note">
+          <p>{e.href ? <a href={e.href}>{e.text}</a> : e.text}</p>
+          <p class="note">{fmt(e.date)}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section wide" aria-labelledby="contact">
+    <h2 class="h2" id="contact" data-denoise="scroll" data-denoise-hover>Contact</h2>
+    <p class="lede"><a href={`mailto:${site.email}`}>{site.email}</a></p>
+    <p class="small muted no-print" style="margin-top:1.5rem">
+      Headings on this site are drawn from noise with a seeded schedule, using the degraded cuts of the typeface (this visit: seed <span data-seed-readout>—</span>).{' '}
+      <button class="button" type="button" id="resample">Resample</button>
+    </p>
   </section>
 </Base>
 
 <script>
-  import { initScans, subject, setSubject, onSubjectChange, fillReadouts, Viewport, enableWindowing } from '../scripts/scan-client';
-  import { describeProtocol, makeProtocol, type ProtocolName } from '../lib/scan/physics';
-  import { mulberry32, formatSeed } from '../lib/scan/prng';
-  import { makeAnatomy } from '../lib/scan/phantom';
-
-  initScans();
-
-  const hero = new Viewport(document.getElementById('hero-scan') as HTMLCanvasElement);
-  const strip = [...document.querySelectorAll<HTMLButtonElement>('.strip__cell')].map((b) => ({
-    btn: b,
-    vp: new Viewport(b.querySelector('canvas')!),
-  }));
-  const pe = document.getElementById('hero-pe')!;
-  const ann = (corner: string) => document.querySelector<HTMLElement>(`.hero__scan .ann--${corner}`)!;
-  const mm = (z: number) => `${z >= 0 ? '+' : '−'}${Math.abs(Math.round(z * 108))} mm`;
-
-  hero.onProgress = (d, n) => { pe.textContent = `PE ${String(d).padStart(3, '0')}/${n}`; };
-
-  /** Put the hero on the slice nearest this subject's lesion, so it's usually in view. */
-  function defaultZ() {
-    const zs = strip.map((s) => Number(s.btn.dataset['z']));
-    const lz = makeAnatomy(subject.seed).lesion?.c[2] ?? 0.12;
-    let best = 0;
-    zs.forEach((z, i) => { if (Math.abs(z - lz) < Math.abs(zs[best]! - lz)) best = i; });
-    return best;
-  }
-
-  let current = defaultZ();
-  const wl = () => `W ${hero.win.toFixed(2)} L ${hero.level.toFixed(2)}`;
-
-  enableWindowing(hero, () => {
-    const el = document.querySelector('.hero__scan [data-wl]');
-    if (el) el.textContent = wl();
-  });
-
-  // Arrow keys step through slices while the scan has focus.
-  hero.canvas.tabIndex = 0;
-  hero.canvas.addEventListener('keydown', (e) => {
-    const d = e.key === 'ArrowUp' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowDown' || e.key === 'ArrowLeft' ? -1 : 0;
-    if (!d) return;
-    e.preventDefault();
-    current = Math.max(0, Math.min(strip.length - 1, current + d));
-    acquireHero(700);
-  });
-
-  function annotate() {
-    const z = Number(strip[current]!.btn.dataset['z']);
-    const proto = makeProtocol(mulberry32(subject.seed ^ 0x51), subject.protocol);
-    ann('tl').innerHTML = `<span>Chalcroft^Liam</span><span>ID ${formatSeed(subject.seed).toUpperCase()}</span>`;
-    ann('bl').innerHTML = `<span>${subject.protocol}</span><span>${describeProtocol(proto)}</span><span>SL ${mm(z)}</span>`;
-    ann('br').innerHTML = `<span data-wl>${wl()}</span><span>IM ${String(current + 1).padStart(2, '0')}/12</span>`;
-    fillReadouts({ seq: describeProtocol(proto) });
-    strip.forEach((s, i) => s.btn.setAttribute('aria-pressed', String(i === current)));
-    document.querySelectorAll<HTMLButtonElement>('[data-protocol]').forEach((b) =>
-      b.setAttribute('aria-pressed', String(b.dataset['protocol'] === subject.protocol)));
-    document.getElementById('overlay')!.setAttribute('aria-pressed', String(subject.overlay));
-  }
-
-  async function acquireHero(duration = 2600) {
-    hero.z = Number(strip[current]!.btn.dataset['z']);
-    annotate();
-    await hero.load();
-    await hero.play(duration);
-  }
-
-  async function acquireStrip() {
-    for (const s of strip) { await s.vp.load(); s.vp.play(700); }
-  }
-
-  let firstRun = true;
-  const io = new IntersectionObserver((e) => {
-    if (!e[0]!.isIntersecting || !firstRun) return;
-    firstRun = false;
-    acquireHero().then(acquireStrip);
-  });
-  io.observe(hero.canvas);
-
-  strip.forEach((s, i) => s.btn.addEventListener('click', () => { current = i; acquireHero(1400); }));
-
-  document.querySelectorAll<HTMLButtonElement>('[data-protocol]').forEach((b) =>
-    b.addEventListener('click', () => setSubject({ protocol: b.dataset['protocol'] as ProtocolName })));
-
-  document.getElementById('overlay')!.addEventListener('click', () => {
-    setSubject({ overlay: !subject.overlay });
-  });
-
-  function resample() {
-    const seed = crypto.getRandomValues(new Uint32Array(1))[0]!;
-    const names: ProtocolName[] = ['T1w', 'PDw', 'T2*w', 'T2w', 'FLAIR', 'Synthetic'];
-    setSubject({ seed, protocol: names[Math.floor(mulberry32(seed ^ 0x9e37)() * names.length)]! });
-  }
-  document.getElementById('resample')!.addEventListener('click', resample);
-  window.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key.toLowerCase() === 'r' && !e.metaKey && !e.ctrlKey && !e.altKey && !(e.target instanceof HTMLInputElement)) resample();
-  });
-
-  const share = document.getElementById('share')!;
-  share.addEventListener('click', async () => {
-    const url = new URL(location.pathname, location.origin);
-    url.searchParams.set('subject', formatSeed(subject.seed));
-    url.searchParams.set('protocol', subject.protocol);
-    try { await navigator.clipboard.writeText(url.href); share.textContent = 'Copied'; }
-    catch { share.textContent = 'Copy failed'; }
-    setTimeout(() => (share.textContent = 'Copy link'), 1600);
-  });
-
-  let lastSeed = subject.seed, lastProto = subject.protocol;
-  onSubjectChange(() => {
-    const anatomyChanged = subject.seed !== lastSeed, contrastChanged = subject.protocol !== lastProto;
-    lastSeed = subject.seed; lastProto = subject.protocol;
-    if (anatomyChanged) current = defaultZ();
-    if (anatomyChanged || contrastChanged) {
-      acquireHero(anatomyChanged ? 2600 : 1400).then(acquireStrip);
-    } else {
-      annotate();
-      hero.draw();
-    }
-  });
-
-  annotate();
+  import { resampleAll } from '../scripts/denoise';
+  document.getElementById('resample')?.addEventListener('click', resampleAll);
 </script>
 
 <style>
-  .hero {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-areas:
-      'title title title title title title title scan scan scan scan scan'
-      'lede  lede  lede  lede  facts facts facts scan scan scan scan scan'
-      'k     k     cap   cap   cap   ctl   ctl   ctl   ctl   ctl   ctl   ctl';
-    border-top: 0;
-  }
-  .hero__title { grid-area: title; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding-top: 28px; }
-  .hero__dr { display: block; font-size: 0.72rem; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 14px 0.2em; }
-  .hero__lede { grid-area: lede; display: flex; align-items: flex-end; }
-  .hero__facts { grid-area: facts; }
-  .hero :global(.hero__scan) { grid-area: scan; aspect-ratio: auto; height: 100%; min-height: 420px; }
-  .hero :global(.hero__scan canvas) { object-fit: cover; cursor: crosshair; touch-action: pan-y; }
-  .hero :global(.hero__scan canvas.is-windowing) { cursor: move; }
-  .hero :global(.hero__scan canvas:focus-visible) { outline: 2px solid var(--lambda); outline-offset: -2px; box-shadow: none; }
-  .fine-only { display: none; }
-  @media (pointer: fine) { .fine-only { display: inline; } }
-  .hero__k { grid-area: k; padding: 0; background: var(--film) !important; }
-  .hero__cap { grid-area: cap; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; }
-  .hero__ctl { grid-area: ctl; display: flex; flex-direction: column; gap: 18px; justify-content: space-between; }
-  .hero__caption { font-size: 0.92rem; color: var(--ink-2); }
-  .kbox { position: relative; aspect-ratio: 1; }
-  .kbox canvas { width: 100%; height: 100%; image-rendering: pixelated; }
-  .kbox__cap { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; padding: 6px 8px; color: var(--film-ink-2); font-size: 9.5px; }
-
-  @media (max-width: 1080px) {
-    .hero {
-      grid-template-areas:
-        'title title title title title title title title title title title title'
-        'scan  scan  scan  scan  scan  scan  scan  scan  scan  scan  scan  scan'
-        'lede  lede  lede  lede  lede  lede  lede  facts facts facts facts facts'
-        'k     k     k     k     cap   cap   cap   cap   cap   cap   cap   cap'
-        'ctl   ctl   ctl   ctl   ctl   ctl   ctl   ctl   ctl   ctl   ctl   ctl';
-    }
-    .hero :global(.hero__scan) { aspect-ratio: 1; height: auto; }
-  }
-  @media (max-width: 640px) {
-    .hero { grid-template-areas: 'title title' 'scan scan' 'lede lede' 'facts facts' 'k cap' 'ctl ctl'; grid-template-columns: 38% 1fr; }
-  }
-
-  .console__group { display: flex; flex-direction: column; gap: 10px; }
-  .console__row { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .strip { grid-template-columns: repeat(12, minmax(0, 1fr)); border-top: 0; }
-  .strip__cell { all: unset; cursor: pointer; display: block; position: relative; background: var(--film); }
-  .strip__cell :global(.tile) { width: 100%; }
-  .strip__cell :global(.ann) { font-size: 8.5px; padding: 5px 6px; }
-  .strip__cell :global(canvas) { transform: scale(1.2); }
-  .strip__cell[aria-pressed='true']::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 2px var(--lambda); pointer-events: none; }
-  .strip__cell:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
-  @media (max-width: 1080px) { .strip { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
-  @media (max-width: 640px) { .strip { grid-template-columns: repeat(4, minmax(0, 1fr)); } .strip > * { grid-column: auto; } }
-
-  .method p:not(.label) { margin-top: 12px; font-size: 0.96rem; }
-  .eq { text-transform: none; font-size: 0.74rem; color: var(--ink-2); border-top: 1px solid var(--rule); padding-top: 10px; }
-
-  .work__more { display: flex; flex-direction: column; justify-content: space-between; gap: 18px; text-decoration: none; min-height: 180px; }
-  .work__more:hover { background: var(--ink) !important; color: var(--bg); }
-  .work__more:hover .label, .work__more:hover .faint { color: inherit; }
-  .work__more-t { font-size: clamp(1.4rem, 2.2vw, 2rem); letter-spacing: -0.03em; font-weight: 520; }
-  .work__more--row { flex-direction: row; align-items: baseline; min-height: 0; gap: 24px; }
-
-  .log li { display: grid; grid-template-columns: 90px 110px 1fr; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
-  .log li:last-child { border-bottom: 0; }
-  .log__date { color: var(--ink); }
-  .log__kind { color: var(--ink-3); }
-  @media (max-width: 640px) { .log li { grid-template-columns: 70px 1fr; } .log__kind { display: none; } }
-
-  .contact { display: flex; flex-direction: column; gap: 22px; padding-top: 40px; padding-bottom: 40px; }
-  .contact__mail { font-size: clamp(1.8rem, 5.4vw, 5rem); letter-spacing: -0.045em; font-weight: 500; line-height: 1; text-decoration-thickness: 2px; text-underline-offset: 0.14em; overflow-wrap: anywhere; }
+  .hero { padding-top: clamp(3rem, 12vh, 9rem); align-items: end; }
+  .hero__intro { margin-top: clamp(1.5rem, 3vw, 2.5rem); max-width: 34rem; }
+  .hero__intro p + p { margin-top: 0.8em; }
+  .hero__note { padding-bottom: 0.5rem; }
+  .hero__who { color: var(--toner); }
+  .more { margin-top: 2rem; font-style: italic; }
+  .recent { display: grid; gap: 0.7rem; }
+  .recent .note { font-size: 0.86rem; }
+  .work .year { font-size: 1.32rem; }
 </style>

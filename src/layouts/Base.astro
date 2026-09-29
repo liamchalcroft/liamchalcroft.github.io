@@ -1,41 +1,38 @@
 ---
-import '@fontsource-variable/hanken-grotesk';
-import '@fontsource/dm-mono/400.css';
-import '@fontsource/dm-mono/500.css';
 import '../styles/global.css';
 import { site } from '../lib/site';
-import { wavelengthToCss } from '../lib/scan/spectrum';
-import Masthead from '../components/Masthead.astro';
+import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 interface Props {
   title?: string;
   description?: string;
-  /** Series code shown in the masthead, e.g. "SE 01". */
-  series?: string;
   ogType?: 'website' | 'article';
   image?: string;
+  noindex?: boolean;
 }
 
-const { title, description = site.description, series = '00', ogType = 'website', image = '/images/og-image.png' } = Astro.props;
-const fullTitle = title ? `${title} · ${site.title}` : `${site.title} · Imaging, synthetic data, spectral vision`;
+const { title, description = site.description, ogType = 'website', image = '/images/og-image.png', noindex = false } = Astro.props;
+const fullTitle = title ? `${title} · ${site.title}` : site.title;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(image, site.url).href;
-
-// Wavelength → colour for 450–650 nm, computed at build time so the head script stays tiny.
-const lut = Array.from({ length: 201 }, (_, i) => wavelengthToCss(450 + i));
 ---
 
 <!doctype html>
-<html lang="en-GB" data-series={series}>
+<html lang="en-GB">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="theme-color" content="#f2f0eb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)" />
+
+    <link rel="preload" href="/fonts/redaction/Redaction-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/redaction/Redaction100-Regular.woff2" as="font" type="font/woff2" crossorigin />
 
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={site.title} />
@@ -63,43 +60,22 @@ const lut = Array.from({ length: 201 }, (_, i) => wavelengthToCss(450 + i));
       url: site.url,
       sameAs: Object.values(site.links),
     })} />
-
-    <!-- Each visit is a new synthetic subject. Its seed fixes the anatomy, the
-         protocol and the one colour on the page: a wavelength from 450 to 650 nm. -->
-    <script is:inline define:vars={{ lut }}>
-      (function () {
-        var s = null;
-        try {
-          var q = new URLSearchParams(location.search).get('subject');
-          if (q && /^[0-9a-f]{1,8}$/i.test(q)) s = parseInt(q, 16) >>> 0;
-          if (s === null) { var v = sessionStorage.getItem('subject'); if (v) s = parseInt(v, 16) >>> 0; }
-        } catch (e) {}
-        if (s === null) s = crypto.getRandomValues(new Uint32Array(1))[0];
-        var hex = (s >>> 0).toString(16).padStart(8, '0');
-        try { sessionStorage.setItem('subject', hex); } catch (e) {}
-        var nm = 450 + (s % 201), d = document.documentElement;
-        d.dataset.subject = hex;
-        d.dataset.lambda = String(nm);
-        d.style.setProperty('--lambda', lut[nm - 450]);
-        d.style.setProperty('--lambda-pos', ((nm - 400) / 3) + '%');
-        d.classList.add('js');
-        window.__LAMBDA__ = lut;
-      })();
-    </script>
     <slot name="head" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <Masthead series={series} />
-    <main id="main">
+    <div class="page">
+      <Header />
+    </div>
+    <main id="main" class="page">
       <slot />
     </main>
-    <Footer />
+    <div class="page">
+      <Footer />
+    </div>
     <script>
-      import { fillReadouts } from '../scripts/scan-client';
-      import { initRaster } from '../scripts/raster';
-      fillReadouts();
-      initRaster();
+      import { initDenoise } from '../scripts/denoise';
+      initDenoise();
     </script>
   </body>
 </html>

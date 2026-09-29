@@ -1,7 +1,7 @@
 ---
 title: "GAZE: Grounded Agentic Zero-shot Evaluation with Viewer-Level Tools and Literature Retrieval on Rare Brain MRI"
 shortTitle: "GAZE"
-date: 2026-08-26
+date: 2026-08-28
 authors:
   - "D. Alim"
   - "M. Alim"

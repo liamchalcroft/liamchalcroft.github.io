@@ -1,58 +1,79 @@
 ---
 import Base from '../layouts/Base.astro';
-import NoiseTile from '../components/NoiseTile.astro';
 ---
 
-<Base title="No signal" series="404" description="This address returned no signal.">
-  <meta slot="head" name="robots" content="noindex" />
-
-  <section class="sheet nosig" aria-labelledby="page-title">
-    <NoiseTile
-      class="span-12"
-      label="Animated Rician noise: an MRI acquisition with no signal in it"
-      tl={['IM 0/0', 'SUBJ —']}
-      tr={['NO SIGNAL']}
-      bl={['SEQ —', 'TE — TR —']}
-      br={['PE 000/000']}
-    />
-    <div class="cell span-8 md-12 nosig__msg">
-      <p class="label raster">Se 404 · Not found</p>
-      <h1 class="nosig__title raster" id="page-title">No signal at this address.</h1>
-      <p class="prose muted raster">
-        The page you asked for is not here. What you see above is what a scanner records when nothing is in the field of view: noise, and nothing else. It may have moved, or the link may be mistyped.
-      </p>
-    </div>
-    <div class="cell span-4 md-12 nosig__aside">
-      <dl class="readout">
-        <dt>Requested</dt><dd><code id="path">—</code></dd>
-        <dt>Status</dt><dd>404</dd>
-      </dl>
-      <div class="nosig__actions">
-        <a class="btn" href="/">Back to index</a>
-        <a class="btn" href="/publications/">Papers</a>
+<Base title="Page not found" description="There is no page at this address." noindex>
+  <section class="lost wide with-note" aria-labelledby="page-title">
+    <div>
+      <!-- Not data-denoise: this heading is held at a fixed, very noisy timestep by the script below. -->
+      <h1 class="display lost__title" id="page-title" data-noisy>Page not found</h1>
+      <div class="lost__text">
+        <p class="lede">There is no page at this address.</p>
+        <p class="lost__links">
+          <a href="/">Home page</a>
+          <a href="/publications/">Publications</a>
+        </p>
       </div>
     </div>
+    <p class="note lost__note">Requested address: <i id="path" class="lost__path">this address</i></p>
   </section>
 </Base>
 
 <script>
-  const el = document.getElementById('path');
-  if (el) el.textContent = location.pathname + location.search;
+  // Hold the heading near pure noise: glyphs sit between Redaction 50 and a random substitute
+  // letter, and the substitutes are re-drawn a few times a second. Same markup as denoise.ts.
+  const h1 = document.querySelector<HTMLElement>('[data-noisy]');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const pathEl = document.getElementById('path');
+  if (pathEl) pathEl.textContent = location.pathname + location.search;
+
+  if (h1) {
+    const LOWER = 'abcdefghijklmnopqrstuvwxyz';
+    const UPPER = LOWER.toUpperCase();
+    const PUNCT = '.,:;-!?/*';
+    const setFor = (ch: string) => (UPPER.includes(ch) ? UPPER : LOWER.includes(ch) ? LOWER : PUNCT);
+    const pick = (s: string) => s[Math.floor(Math.random() * s.length)]!;
+
+    const subs: { el: HTMLElement; set: string }[] = [];
+    const text = h1.textContent ?? '';
+    const frag = document.createDocumentFragment();
+    for (const part of text.split(/(\s+)/)) {
+      if (!part) continue;
+      if (/^\s+$/.test(part)) { frag.append(part); continue; }
+      const word = document.createElement('span');
+      word.className = 'dn__w';
+      for (const ch of part) {
+        const g = document.createElement('span');
+        g.className = 'dn__g';
+        g.textContent = ch;
+        const r = Math.random();
+        const level = r < 0.15 ? 4 : r < 0.4 ? 5 : r < 0.7 ? 6 : 7; // 4 to 7, weighted towards the noisy end
+        g.dataset['l'] = String(level);
+        g.dataset['c'] = ch;
+        if (level === 7) {
+          const set = setFor(ch);
+          g.dataset['c'] = pick(set);
+          subs.push({ el: g, set });
+        }
+        word.append(g);
+      }
+      frag.append(word);
+    }
+    h1.replaceChildren(frag);
+
+    if (!reduced && subs.length) {
+      setInterval(() => {
+        for (const s of subs) s.el.dataset['c'] = pick(s.set);
+      }, 250);
+    }
+  }
 </script>
 
 <style>
-  .nosig { border-top: 0; }
-  .nosig__msg { padding-top: clamp(28px, 4vw, 56px); padding-bottom: clamp(28px, 4vw, 56px); }
-  .nosig__title {
-    margin: 14px 0 22px -0.04em;
-    font-size: clamp(2.6rem, 7vw, 6rem);
-    font-weight: 560;
-    line-height: 0.92;
-    letter-spacing: -0.05em;
-    text-wrap: balance;
-    max-width: 14ch;
-  }
-  .nosig__aside { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
-  .nosig__aside code { overflow-wrap: anywhere; }
-  .nosig__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lost { padding-top: clamp(3rem, 14vh, 10rem); align-items: end; }
+  .lost__text { margin-top: clamp(1.6rem, 3vw, 2.6rem); max-width: 30em; }
+  .lost__links { margin-top: 1.2rem; display: flex; flex-wrap: wrap; gap: 0.2rem 1.4rem; font-style: italic; }
+  .lost__note { padding-bottom: 0.4rem; }
+  .lost__path { overflow-wrap: anywhere; }
 </style>

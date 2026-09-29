@@ -3,19 +3,21 @@ export const site = {
   title: 'Dr Liam Chalcroft',
   url: 'https://liamchalcroft.github.io',
   description:
-    'Founding Computer Vision Scientist at Prospectral. PhD in machine learning for medical imaging, University College London. I train imaging models on scans that were never acquired.',
+    'Liam Chalcroft is a machine learning researcher working on medical and spectral imaging, and founding computer vision scientist at Prospectral. PhD, University College London.',
   email: 'liamchalcroft@gmail.com',
   links: {
     scholar: 'https://scholar.google.com/citations?user=u3EHJ0gAAAAJ&hl=en',
     github: 'https://github.com/liamchalcroft',
     orcid: 'https://orcid.org/0000-0003-3363-6454',
     linkedin: 'https://www.linkedin.com/in/liamchalcroft',
+    twitter: 'https://twitter.com/chalcroft_liam',
   },
+  /** Google Scholar snapshot. Update by hand; Scholar can't be fetched at build time. */
+  citations: { count: 78, asOf: 'September 2026' },
   nav: [
-    { href: '/', label: 'Index', code: '00' },
-    { href: '/publications/', label: 'Papers', code: '01' },
-    { href: '/software/', label: 'Code', code: '02' },
-    { href: '/cv/', label: 'CV', code: '03' },
+    { href: '/publications/', label: 'Papers' },
+    { href: '/software/', label: 'Code' },
+    { href: '/cv/', label: 'CV' },
   ],
 } as const;
 

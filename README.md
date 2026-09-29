@@ -2,14 +2,19 @@
 
 Personal site of Dr Liam Chalcroft. Astro + TypeScript, deployed to GitHub Pages by GitHub Actions.
 
-Every scan on the site is synthesised in the visitor's browser. Each visit gets a random 32-bit subject seed, and that seed fixes:
+The design is called *Timesteps*. The site is set in one typeface, [Redaction](https://github.com/jeremymickel/Redaction), which comes in seven levels of bitmap degradation. Display text is sampled from noise glyph by glyph (`src/scripts/denoise.ts`):
 
-1. **Anatomy.** A procedural brain phantom built as tissue labels with partial-volume fractions: cortex with radial sulci, white matter, deep grey matter, ventricles, and usually a stroke lesion (`src/lib/scan/phantom.ts`).
-2. **Contrast.** Per-tissue proton density and T1/T2/T2\* go through the signal equation for a sampled protocol (SPGR, FSE, FLAIR), or through random per-tissue intensities in SynthSeg style (`src/lib/scan/physics.ts`).
-3. **Acquisition.** The image is Fourier transformed and re-acquired one phase-encode line at a time, with an O(N²)-per-line incremental reconstruction (`src/lib/scan/acquire.ts`).
-4. **Colour.** The only colour on the site is one wavelength between 450 and 650 nm, converted with the CIE 1931 colour-matching functions (`src/lib/scan/spectrum.ts`).
+- Every glyph gets its own offset in the noise schedule from a seeded PRNG, so words resolve unevenly, as a real diffusion sample does.
+- The hero sentence is sampled when the page opens. Headings follow their scroll position, so they are noisy low on the screen and clean by mid-screen.
+- Hovering a heading resamples it. Clicking an internal link runs the forward process before navigating.
+- The clean text always holds the layout, and noisy glyphs are drawn as overlays, so lines never reflow. With JS off, or with reduced motion, text is simply clean.
+- Append `?seed=84cb3841` to reproduce a sample.
 
-Append `?subject=84cb3841&protocol=FLAIR` to any URL to reproduce a subject. The paper thumbnails are seeded by their slug, so they're the same for everyone.
+The home page's one figure, `src/components/SynthFigure.astro`, is a live version of the PhD method:
+
+1. A procedural brain phantom is generated as tissue labels (`src/lib/scan/phantom.ts`).
+2. It is pushed through an MRI signal equation, or through random SynthSeg-style intensities (`src/lib/scan/physics.ts`).
+3. This runs in a Web Worker.
 
 ## Working on it
 

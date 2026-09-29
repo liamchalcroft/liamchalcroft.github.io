@@ -1,30 +1,28 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import type { InferGetStaticPropsType } from 'astro';
 import Base from '../../layouts/Base.astro';
-import ScanTile from '../../components/ScanTile.astro';
 import { authorsHtml, SELF, site, year } from '../../lib/site';
 import { toBibtex } from '../../lib/bibtex';
-import { tileParams } from '../../lib/paperTile';
 
 export async function getStaticPaths() {
   const pubs = (await getCollection('publications')).sort((a, b) => +b.data.date - +a.data.date);
   return pubs.map((entry, i) => ({
     params: { slug: entry.id },
-    props: { entry, newer: pubs[i - 1], older: pubs[i + 1], index: i + 1, total: pubs.length },
+    props: { entry, newer: pubs[i - 1], older: pubs[i + 1] },
   }));
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-const { entry, newer, older, index, total } = Astro.props as Props;
+const { entry, newer, older } = Astro.props as Props;
 const d = entry.data;
 const b = d.bib;
-const { Content } = await render(entry);
 const hasAbstract = Boolean(entry.body?.trim());
+// The abstract is set with a run-in "Abstract" label, so inject it into the first paragraph.
+const abstractHtml = hasAbstract
+  ? (entry.rendered?.html ?? '').replace(/^\s*<p>/, '<p><i class="runin">Abstract.</i> ')
+  : '';
 const bibtex = toBibtex(entry);
-const t = tileParams(entry);
-const pad = (n: number) => String(n).padStart(2, '0');
-const kindLabel = { journal: 'Journal paper', conference: 'Conference paper', workshop: 'Workshop paper', thesis: 'Thesis' }[d.kind];
 const url = new URL(`/publication/${entry.id}/`, site.url).href;
 
 // Google Scholar (Highwire) metadata.
@@ -36,15 +34,16 @@ const description = hasAbstract
   ? entry.body!.replace(/\s+/g, ' ').trim().slice(0, 240).replace(/\s\S*$/, '') + '…'
   : `${d.title}. ${d.venue}.`;
 
+const kindWord = { journal: 'journal paper', conference: 'conference paper', workshop: 'workshop paper', thesis: 'thesis' }[d.kind];
 const links = [
-  d.links.paper && { label: 'Paper', url: d.links.paper },
+  d.links.paper && { label: 'paper', url: d.links.paper },
   d.links.arxiv && { label: 'arXiv', url: d.links.arxiv },
-  d.links.code && { label: 'Code', url: d.links.code },
+  d.links.code && { label: 'code', url: d.links.code },
   ...d.links.extra,
 ].filter(Boolean) as { label: string; url: string }[];
 ---
 
-<Base title={d.title} description={description} series="01" ogType="article">
+<Base title={d.title} description={description} ogType="article">
   <Fragment slot="head">
     <meta name="citation_title" content={d.title} />
     {d.authors.map((a) => <meta name="citation_author" content={scholarAuthor(a)} />)}
@@ -62,104 +61,64 @@ const links = [
     <meta name="citation_abstract_html_url" content={url} />
   </Fragment>
 
-  <section class="head sheet" aria-labelledby="paper-title">
-    <div class="head__scan span-5 md-12">
-      <ScanTile
-        kind={t.kind}
-        n={512}
-        z={t.z}
-        seed={t.seed}
-        protocol={t.protocol}
-        order="linear"
-        duration={2200}
-        label={`A procedurally synthesised ${d.modality === 'mri' ? 'MRI slice' : d.modality === 'ultrasound' ? 'ultrasound frame' : 'photonics field simulation'}, seeded by this paper's slug`}
-        tl={[d.venueShort, String(year(d.date))]}
-        tr={[t.modalityLabel, `IM ${pad(index)}/${pad(total)}`]}
-        bl={[d.title]}
-      />
-      <p class="head__note label">Procedural illustration synthesised from this paper's seed. Not data from the paper.</p>
-    </div>
-
-    <div class="head__info cell span-7 md-12">
-      <p class="label raster">Se 01 · {kindLabel} · {year(d.date)}</p>
-      <h1 class="head__title raster" id="paper-title">{d.title}</h1>
-      <p class="head__authors raster" set:html={authorsHtml(d.authors, d.etAl)} />
-      <p class="head__venue muted raster">{d.venue}</p>
-      {(d.badge || d.note) && (
-        <p class="head__badge raster">
-          {d.badge && <span class="badge">{d.badge}</span>}
-          {d.note && <span class="faint">{d.note}</span>}
+  <article class="paper" aria-labelledby="paper-title">
+    <header class="paper__head wide with-note">
+      <div>
+        <h1 class="paper__title" id="paper-title" data-denoise="load" data-key={entry.id}>{d.title}</h1>
+        <p class="paper__authors" set:html={authorsHtml(d.authors, d.etAl)} />
+        <p class="paper__venue">
+          <cite>{d.venue}</cite>{d.badge && <>, {d.badge.toLowerCase()}</>}.
+          {d.note && <> {d.note}</>}
         </p>
-      )}
-      <ul class="entry__links head__links raster">
-        {links.map((l) => <li><a href={l.url}>{l.label}</a></li>)}
-        {d.doi && <li><a href={`https://doi.org/${d.doi}`}>DOI</a></li>}
-      </ul>
-    </div>
-  </section>
-
-  <section class="sheet" aria-label="Abstract and details">
-    <div class="cell span-8 md-12">
-      <p class="label">Abstract</p>
-      <div class="prose abstract raster">
-        {hasAbstract
-          ? <Content />
-          : <p class="muted">The thesis is not summarised here. Read it at the <a href={paperLink ?? '/publications/'}>paper link</a>.</p>}
+        <p class="work__links paper__links">
+          {links.map((l) => <a href={l.url}>{l.label}</a>)}
+          {d.doi && <a href={`https://doi.org/${d.doi}`}>DOI</a>}
+        </p>
       </div>
-    </div>
-    <div class="cell span-4 md-12">
-      <p class="label">Record</p>
-      <dl class="readout record">
-        <dt>Year</dt><dd>{year(d.date)}</dd>
-        <dt>Type</dt><dd>{kindLabel}</dd>
-        <dt>Venue</dt><dd>{b.container}</dd>
-        {b.volume && <><dt>Volume</dt><dd>{b.volume}</dd></>}
-        {b.number && <><dt>Issue</dt><dd>{b.number}</dd></>}
-        {b.pages && <><dt>Pages</dt><dd>{b.pages}</dd></>}
-        {d.doi && <><dt>DOI</dt><dd><a href={`https://doi.org/${d.doi}`}>{d.doi}</a></dd></>}
-      </dl>
-    </div>
-  </section>
+      <p class="note record">
+        <span><i>Year</i> {year(d.date)}</span>
+        <span><i>Kind</i> {kindWord}</span>
+        <span><i>Venue</i> {b.container}</span>
+        {b.volume && <span><i>Volume</i> {b.volume}</span>}
+        {b.number && <span><i>Issue</i> {b.number}</span>}
+        {b.pages && <span><i>Pages</i> {b.pages}</span>}
+        {d.doi && <span><i>DOI</i> <a href={`https://doi.org/${d.doi}`}>{d.doi}</a></span>}
+      </p>
+    </header>
 
-  {d.figure && (
-    <section class="sheet" aria-label="Figure">
-      <figure class="cell span-12 fig">
+    <div class="paper__abstract prose">
+      {hasAbstract
+        ? <Fragment set:html={abstractHtml} />
+        : <p>
+            {paperLink ? <>Abstract to follow; the paper is at <a href={paperLink}>{new URL(paperLink).host}</a>.</> : <>Abstract to follow.</>}
+          </p>}
+    </div>
+
+    {d.figure && (
+      <figure class="paper__figure wide with-note">
         <img src={d.figure.src} width={d.figure.width} height={d.figure.height} alt={d.figure.alt} loading="lazy" decoding="async" />
-        <figcaption class="label">Figure from the paper.{d.figure.caption ? ` ${d.figure.caption}` : ''}</figcaption>
+        <figcaption class="note">
+          <i>Figure from the paper.</i>{d.figure.caption ? ` ${d.figure.caption}` : ''}
+        </figcaption>
       </figure>
-    </section>
-  )}
+    )}
 
-  <section class="sheet" aria-labelledby="cite">
-    <div class="cell span-12 cite">
-      <div class="cite__bar">
-        <h2 class="label" id="cite">Cite</h2>
-        <button class="btn no-print" type="button" id="copy-bib" data-label="Copy BibTeX">Copy BibTeX</button>
+    <section class="paper__cite" aria-label="Cite this paper">
+      <div class="paper__citebar">
+        <p class="faint"><i>Cite</i></p>
+        <button class="button no-print" type="button" id="copy-bib" data-label="Copy BibTeX">Copy BibTeX</button>
       </div>
-      <pre class="cite__pre" id="bibtex"><code>{bibtex}</code></pre>
-    </div>
-  </section>
+      <pre class="paper__pre" id="bibtex"><code>{bibtex}</code></pre>
+    </section>
 
-  <nav class="sheet pager" aria-label="Other papers">
-    {newer
-      ? <a class="cell span-6 md-12 pager__link" href={`/publication/${newer.id}/`} rel="prev">
-          <span class="label">← Previous · {year(newer.data.date)}</span>
-          <span class="pager__title">{newer.data.shortTitle}</span>
-        </a>
-      : <div class="cell span-6 md-12 pager__empty" aria-hidden="true"></div>}
-    {older
-      ? <a class="cell span-6 md-12 pager__link pager__link--next" href={`/publication/${older.id}/`} rel="next">
-          <span class="label">Next · {year(older.data.date)} →</span>
-          <span class="pager__title">{older.data.shortTitle}</span>
-        </a>
-      : <div class="cell span-6 md-12 pager__empty" aria-hidden="true"></div>}
-  </nav>
+    <nav class="paper__pager no-print" aria-label="Other papers">
+      {newer ? <a href={`/publication/${newer.id}/`} rel="prev">← {newer.data.shortTitle}</a> : <span />}
+      {older ? <a href={`/publication/${older.id}/`} rel="next">{older.data.shortTitle} →</a> : <span />}
+    </nav>
+  </article>
 </Base>
 
 <script>
-  import { initScans } from '../../scripts/scan-client';
-  initScans();
-
   const btn = document.getElementById('copy-bib') as HTMLButtonElement | null;
   const pre = document.getElementById('bibtex');
   if (btn && pre) {
@@ -186,52 +145,54 @@ const links = [
 </script>
 
 <style>
-  .head { border-top: 0; }
-  .head__scan { background: var(--cell); display: flex; flex-direction: column; }
-  .head__scan :global(.tile) { width: 100%; }
-  .head__scan :global(.ann--bl) { max-width: 82%; }
-  .head__note { padding: 12px var(--pad) 14px; border-top: 1px solid var(--rule); }
-  .head__info { display: flex; flex-direction: column; gap: 0; padding-top: clamp(24px, 3vw, 44px); padding-bottom: clamp(24px, 3vw, 44px); }
-  .head__title {
-    margin: 16px 0 22px -0.03em;
-    font-size: clamp(2rem, 3.7vw, 3.5rem);
-    font-weight: 560;
-    line-height: 1.02;
-    letter-spacing: -0.045em;
+  /* <article> is a direct child of <main class="page">, so let it share the page grid. */
+  .paper { display: contents; }
+  .paper > * { grid-column: main; }
+  .paper > .wide { grid-column: main-start / note-end; }
+
+  .paper__head { padding-top: clamp(2.5rem, 8vh, 6rem); }
+  .paper__title {
+    font-size: clamp(1.9rem, 3.5vw, 3.2rem);
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    font-weight: 400;
     text-wrap: balance;
   }
-  .head__authors { font-size: 1.05rem; color: var(--ink-2); max-width: 56ch; }
-  .head__venue { margin-top: 10px; font-size: 1rem; }
-  .head__badge { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; font-size: 0.92rem; }
-  .head__links { margin-top: auto; padding-top: 28px; font-size: 0.78rem; gap: 6px 22px; }
+  .paper__authors { margin-top: clamp(1.1rem, 2vw, 1.6rem); font-size: 1.1rem; }
+  .paper__venue { margin-top: 0.3rem; color: var(--toner-2); }
+  .paper__links { margin-top: 0.8rem; }
 
-  .abstract { margin-top: 14px; font-size: 1.04rem; }
-  .record { margin-top: 12px; }
-  .record dd { overflow-wrap: anywhere; }
+  .record { display: grid; gap: 0.35rem; padding-top: 0.5rem; }
+  .record span { display: block; overflow-wrap: anywhere; }
+  .record i { color: var(--toner-3); margin-right: 0.3em; }
 
-  .fig img { width: 100%; height: auto; max-width: 1116px; margin: 0 auto; background: #fff; border: 1px solid var(--rule); }
-  .fig figcaption { margin-top: 12px; max-width: 1116px; margin-inline: auto; }
+  .paper__abstract { margin-top: clamp(2.5rem, 5vw, 4rem); }
+  .runin { font-size: 0.86em; color: var(--toner-2); }
 
-  .cite__bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 14px; }
-  .cite__pre {
-    margin: 0; padding: 16px; overflow-x: auto;
-    background: var(--film); color: var(--film-ink);
-    font: 400 0.8rem/1.6 var(--mono); letter-spacing: 0.02em; tab-size: 2;
+  .paper__figure { margin-top: clamp(2.5rem, 5vw, 4rem); }
+  .paper__figure img { width: 100%; height: auto; background: #fff; }
+  @media (min-width: 1001px) { .paper__figure figcaption { padding-top: 0.2rem; } }
+
+  .paper__cite { margin-top: clamp(3rem, 6vw, 5rem); }
+  .paper__citebar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 0.6rem; }
+  .paper__pre {
+    margin: 0; padding: 1rem 1.1rem; overflow-x: auto;
+    background: color-mix(in srgb, var(--toner) 5%, var(--paper));
+    font: 400 0.86rem / 1.5 var(--serif);
+    tab-size: 2;
   }
-  .cite__pre code { font: inherit; letter-spacing: inherit; white-space: pre; }
+  .paper__pre code { font: inherit; white-space: pre; }
 
-  .pager { margin-top: clamp(40px, 5vw, 72px); }
-  .pager__link { display: flex; flex-direction: column; gap: 10px; text-decoration: none; min-height: 132px; justify-content: space-between; }
-  .pager__link--next { text-align: right; align-items: flex-end; }
-  .pager__link:hover { background: var(--ink) !important; color: var(--bg); }
-  .pager__link:hover .label { color: inherit; }
-  .pager__title { font-size: clamp(1.3rem, 2vw, 1.8rem); letter-spacing: -0.03em; font-weight: 520; line-height: 1.1; max-width: 26ch; }
-  @media (max-width: 1080px) { .pager__empty { display: none; } }
-  @media (max-width: 640px) { .pager__link--next { text-align: left; align-items: flex-start; } }
+  .paper__pager {
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+    display: flex; justify-content: space-between; gap: 1.5rem;
+    font-style: italic;
+  }
+  .paper__pager a:last-child { text-align: right; }
+  @media (max-width: 600px) { .paper__pager { flex-direction: column; } .paper__pager a:last-child { text-align: left; } }
 
   @media print {
-    .head__note { display: none; }
-    .pager { display: none; }
-    .cite__pre { background: none; color: #000; border: 1px solid #bbb; white-space: pre-wrap; }
+    .paper__pre { white-space: pre-wrap; }
+    .paper__pre code { white-space: pre-wrap; }
   }
 </style>
